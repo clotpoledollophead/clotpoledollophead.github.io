@@ -7,10 +7,11 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #bc0000;
             margin: 0;
             padding: 0;
-            color: #fff;
+            background-color: #8B0000; /* Initial Blood Red */
+            overflow: hidden;
+            transition: background-color 0.5s ease; /* Smooth background color transition */
         }
 
         .container {
@@ -24,10 +25,12 @@
         h1 {
             font-size: 2rem;
             margin-bottom: 1rem;
+            color: #fff;
         }
 
         p {
             font-size: 1.2rem;
+            color: #fff;
         }
 
         .button {
@@ -53,5 +56,22 @@
         <p>Explore interactive visualizations and data insights from the world of House of the Dragon.</p>
         <a class="button" href="#">Get Started</a>
     </div>
+
+    <script>
+        // JavaScript for background color transition on scroll
+        window.addEventListener('scroll', function () {
+            const body = document.body;
+            const scrollPosition = window.pageYOffset;
+            const bloodRedPosition = 100; // Adjust this value based on when you want the transition to start
+
+            if (scrollPosition < bloodRedPosition) {
+                body.style.backgroundColor = '#8B0000'; // Blood Red
+            } else if (scrollPosition >= bloodRedPosition && scrollPosition < bloodRedPosition + 200) {
+                body.style.backgroundColor = '#008000'; // Dark Green
+            } else {
+                body.style.backgroundColor = '#000000'; // Black
+            }
+        });
+    </script>
 </body>
 </html>
