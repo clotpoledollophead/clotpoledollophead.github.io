@@ -10,14 +10,14 @@
             margin: 0;
             padding: 0;
             background-color: #8B0000; /* Initial Blood Red */
-            overflow: hidden;
+            overflow-x: hidden; /* Hide horizontal overflow */
+            overflow-y: auto; /* Enable vertical scrolling */
             transition: background-color 0.5s ease; /* Smooth background color transition */
-            overflow: auto; /* or overflow: visible; */
         }
 
         .menu {
             background-color: #000;
-            width: 50%;
+            width: 100%; /* Make the menu span the entire width */
             height: 50px;
             position: fixed;
             top: 0;
@@ -40,19 +40,21 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            padding-top: 60px; /* Add padding to account for the menu height */
+            padding: 20px;
+            background-color: #fff; /* Content Background Color */
+            border-radius: 5px; /* Rounded corners for content */
+            margin: 20px; /* Add margin to separate content */
+            color: #333; /* Text color */
         }
 
         h1 {
             font-size: 2rem;
             margin-bottom: 1rem;
-            color: #fff;
         }
 
         p {
             font-size: 1.2rem;
-            color: #fff;
+            margin-bottom: 1rem;
         }
 
         .button {
@@ -80,27 +82,27 @@
         <a href="hotd-viz/delve-in-deep.html">Delve in Deep</a>
     </div>
 
-    <div id="about">
+    <div class="container" id="about">
         <h1>About This Project</h1>
-        <p>Learn more about our data visualizations project.</p>
+        <p>Welcome to our House of the Dragon data visualizations project. Explore the world of House of the Dragon through interactive visualizations and insights.</p>
         <a class="button" href="hotd-viz/about.html">Get Started</a>
     </div>
 
-    <div id="word-count">
+    <div class="container" id="word-count">
         <h1>Word Count</h1>
-        <p>Explore the word count data for the entire first season of <i>House of the Dragon</i>.</p>
-        <a class="button" href="hotd-viz/word-count.html">Get Started</a>
+        <p>Discover the word count data for the entire first season of House of the Dragon.</p>
+        <a class="button" href="hotd-viz/word-count.html">Explore Now</a>
     </div>
 
-    <div id="character-network">
+    <div class="container" id="character-network">
         <h1>Character Network</h1>
-        <p>Discover the character network analysis for <i>House of the Dragon</i>.</p>
-        <a class="button" href="hotd-viz/character-network.html">Get Started</a>
+        <p>Uncover the character network analysis for House of the Dragon and dive into the relationships among the characters.</p>
+        <a class="button" href="hotd-viz/character-network.html">Explore Now</a>
     </div>
 
-    <div id="delve-in-deep">
+    <div class="container" id="delve-in-deep">
         <h1>Delve in Deep</h1>
-        <p>Take a dive into the data and explore the deeper meaning behind the data.</p>
+        <p>Take a deep dive into the data and gain deeper insights into the world of House of the Dragon through interactive visualizations.</p>
         <a class="button" href="hotd-viz/delve-in-deep.html">Explore Now</a>
     </div>
 
