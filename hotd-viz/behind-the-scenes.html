@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your GitHub Pages Site</title>
+    <script>
+        function enlargeImage(imageSrc) {
+            const enlargedImageContainer = document.getElementById("enlarged-image-container");
+            const enlargedImage = document.getElementById("enlarged-image");
+
+            enlargedImage.src = imageSrc;
+            enlargedImageContainer.style.display = "block";
+        }
+
+        function closeEnlargedImage() {
+            const enlargedImageContainer = document.getElementById("enlarged-image-container");
+            enlargedImageContainer.style.display = "none";
+        }
+    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -127,20 +141,93 @@
         <img id="enlarged-image" alt="Enlarged Image">
     </div>
 
-    <script>
-        function enlargeImage(imageSrc) {
-            const enlargedImageContainer = document.getElementById("enlarged-image-container");
-            const enlargedImage = document.getElementById("enlarged-image");
+    
 
-            enlargedImage.src = imageSrc;
-            enlargedImageContainer.style.display = "block";
-        }
+    <div>
+        <p>
+            Then, after all that tedious, manual work, came the fun part. 
+            The automated part where I could just press a button and sit back and relax. 
+        </p>
+        <p>
+            Well, okay, not exactly, but it was much less labor intensive on my part.
+        </p>
+        <p>
+            What I did was write a tiny piece of code (as shown right after this paragraph) 
+            that could count how many times a character spoke a word, and then output it.
+        </p>
+        <pre>
+            <code class="language-python">
+                import os
+                import re
+                import pandas as pd
+                from collections import Counter
 
-        function closeEnlargedImage() {
-            const enlargedImageContainer = document.getElementById("enlarged-image-container");
-            enlargedImageContainer.style.display = "none";
-        }
-    </script>
+                # Function to get the word frequency counts in a text file
+                def get_word_counts(filename):
+                    with open(filename, 'r', encoding='utf-8') as file:
+                        text = file.read().lower()
+                        words = re.findall(r"\b\w+(?:'\w+)?\b", text)
+                        word_counts = Counter(words)
+                        return word_counts
 
+                # Set the directory path
+                directory = "F:/undergrad_proj_3/scripts/e1/"
+
+                # Get a list of all txt files in the specified directory
+                txt_files = [file for file in os.listdir(directory) if file.endswith('.txt')]
+
+                # Store the word counts in each file
+                individual_word_counts = {}
+
+                # Analyze each file
+                for file in txt_files:
+                    file_path = os.path.join(directory, file)
+                    word_counts = get_word_counts(file_path)
+                    sorted_word_counts = sorted(word_counts.items(), key=lambda x: (-x[1], x[0]))
+                    individual_word_counts[file] = sorted_word_counts
+
+                # Combine the word counts of all text files
+                combined_word_counts = Counter()
+                for word_counts in individual_word_counts.values():
+                    combined_word_counts += Counter(dict(word_counts))
+
+                # Display the word counts in each file as tables
+                for file, word_counts in individual_word_counts.items():
+                    df = pd.DataFrame(word_counts, columns=["Word", "Count"])
+                    # Set the index to start at 1
+                    df.index = df.index + 1
+
+                    # Sort the word counts by frequency and alphabetical order
+                    df = df.sort_values(["Count", "Word"], ascending=[False, True])
+
+                    # Reset the index to match the new order and start at 1
+                    df = df.reset_index(drop=True)
+                    df.index = df.index + 1
+
+                    # Set the display options to show all columns and rows
+                    pd.set_option("display.max_columns", None)
+                    pd.set_option("display.max_rows", None)
+
+                    print(f"Word Counts in {file}:")
+                    print(df)
+                    print()
+
+                # Display the combined word counts of all text files
+                df_combined = pd.DataFrame(combined_word_counts.items(), columns=["Word", "Count"])
+                # Set the index to start at 1
+                df_combined.index = df_combined.index + 1
+
+                # Sort the combined word counts by frequency and alphabetical order
+                df_combined = df_combined.sort_values(["Count", "Word"], ascending=[False, True])
+
+                # Reset the index to match the new order and start at 1
+                df_combined = df_combined.reset_index(drop=True)
+                df_combined.index = df_combined.index + 1
+
+                print("Combined Word Counts of All Text Files:")
+                print(df_combined)
+            </code>
+        </pre>
+    </div>
 </body>
 </html>
