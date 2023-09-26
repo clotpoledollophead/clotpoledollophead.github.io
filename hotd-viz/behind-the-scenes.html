@@ -157,8 +157,8 @@
         </p>
     </div>
     
-     <!-- Gallery container for thumbnail images -->
-     <div class="thumbnail-container">
+    <!-- Gallery container for thumbnail images -->
+    <div class="thumbnail-container">
         <img src="episodes-dialogue-1.png" alt="Image 1" class="thumbnail" onclick="enlargeImage('episodes-dialogue-1.png')">
         <img src="episodes-dialogue-2.png" alt="Image 2" class="thumbnail" onclick="enlargeImage('episodes-dialogue-2.png')">
     </div>
@@ -256,6 +256,31 @@
                 print(df_combined)
             </code>
         </pre>
+
+        <p>
+            Here below is the ginormous list of word counts and what it looks like after I copied and pasted into an Excel document before processing it further.
+        </p>
     </div>
+    <!-- Gallery container for thumbnail images -->
+    <div class="thumbnail-container">
+        <img src="e1_episode_word_count_raw.png" alt="Image 1" class="thumbnail" onclick="enlargeImage('e1_episode_word_count_raw.png')">
+        <img src="e1_episode_word_count_raw_excel.png" alt="Image 2" class="thumbnail" onclick="enlargeImage('e1_episode_word_count_raw_excel.png')">
+        <img src="excel_to_csv.png" alt="Image 3" class="thumbnail" onclick="enlargeImage('excel_to_csv.png')">
+    </div>
+
+    <!-- Enlarged image container -->
+    <div id="enlarged-image-container">
+        <span class="close-button" onclick="closeEnlargedImage()">&times;</span>
+        <img id="enlarged-image" alt="Enlarged Image">
+    </div>
+
+    <div>
+        <p>
+            Then, I saved all my files in Microsoft Excel to .csv files.
+            (Why I didn't just write code to convert the files: 
+            there's already an application to help me, so why do more work myself?)
+        </p>
+    </div>
+    
 </body>
 </html>
