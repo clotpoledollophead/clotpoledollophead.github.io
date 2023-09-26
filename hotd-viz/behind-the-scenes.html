@@ -8,8 +8,9 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
+            margin: 10%;
+            padding: 1%;
+            line-height: 1.5;
         }
 
         .container {
@@ -26,7 +27,7 @@
         }
 
         p {
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .button {
@@ -42,12 +43,104 @@
         .button:hover {
             background-color: #800000;
         }
+
+        /* Styles for thumbnail images */
+        .thumbnail {
+            width: 50%;
+            height: auto;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        /* Style for the gallery container */
+        .thumbnail-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Styles for enlarged image container */
+        #enlarged-image-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            text-align: center;
+            z-index: 1; /* Ensure it's on top of other content */
+        }
+
+        /* Styles for enlarged image */
+        #enlarged-image {
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Style for the close button */
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Behind the Scenes</h1>
-        <p>This webpage is under construction. Please visit again later.</p>
+        <h1>BEHIND THE SCENES</h1>
     </div>
+
+    <div>
+        <p>
+            So, how did these visualizations come to life? 
+            How did the script of a TV show become these visually appealing graphs, tables, and networks
+            instead of being a whole (<b>very</b> large) bunch of words?
+        </p>
+        <p>
+            Well, it all started with watching the <i>House of the Dragon</i> itself.
+        </p>
+        <p>
+            The first thing I did was watch all of the episodes, 
+            and record everything that <b>every single character</b> had said.
+            I put each character's dialogue from each episode into different .txt documents, as shown below:
+        </p>
+    </div>
+    
+     <!-- Gallery container for thumbnail images -->
+     <div class="thumbnail-container">
+        <img src="episodes-dialogue-1.png" alt="Image 1" class="thumbnail" onclick="enlargeImage('episodes-dialogue-1.png')">
+        <img src="episodes-dialogue-2.png" alt="Image 2" class="thumbnail" onclick="enlargeImage('episodes-dialogue-2.png')">
+    </div>
+
+    <!-- Enlarged image container -->
+    <div id="enlarged-image-container">
+        <span class="close-button" onclick="closeEnlargedImage()">&times;</span>
+        <img id="enlarged-image" alt="Enlarged Image">
+    </div>
+
+    <script>
+        function enlargeImage(imageSrc) {
+            const enlargedImageContainer = document.getElementById("enlarged-image-container");
+            const enlargedImage = document.getElementById("enlarged-image");
+
+            enlargedImage.src = imageSrc;
+            enlargedImageContainer.style.display = "block";
+        }
+
+        function closeEnlargedImage() {
+            const enlargedImageContainer = document.getElementById("enlarged-image-container");
+            enlargedImageContainer.style.display = "none";
+        }
+    </script>
+
 </body>
 </html>
