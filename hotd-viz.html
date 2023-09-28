@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>House of the Dragon Data Visualizations</title>
+    <title>House of the Dragon Data Visualization</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,6 +29,13 @@
             z-index: 1;
         }
 
+        /* Style the logo within the menu */
+        .logo img {
+            width: 50px; /* Adjust the width of your logo */
+            height: auto; /* Maintain aspect ratio */
+            margin: 0 10px; /* Add margin around the logo */
+        }
+
         .menu a {
             text-decoration: none;
             color: #fff;
@@ -40,6 +47,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            height: 95vh;
             padding: 20px;
             background-color: #fff; /* Content Background Color */
             border-radius: 5px; /* Rounded corners for content */
@@ -76,6 +84,9 @@
 </head>
 <body>
     <div class="menu">
+        <div class="logo">
+            <img src="hotd-viz/logo.png" alt="logo">
+        </div>
         <a href="hotd-viz/about.html">About</a>
         <a href="hotd-viz/word-count.html">Word Count</a>
         <a href="hotd-viz/character-network.html">Character Network</a>
