@@ -38,15 +38,60 @@
 
         .container {
             display: flex;
+            position: relative;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 95vh;
             padding: 20px;
-            background-color: #fff; /* Content Background Color */
             border-radius: 5px; /* Rounded corners for content */
             margin: 20px; /* Add margin to separate content */
             color: #333; /* Text color */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.25; /* Adjust the overlay opacity as needed */
+        }
+
+        /* Apply different background images based on data-background attribute */
+        .container[data-background="hotd-viz/intro-cover.jpg"]::before {
+            background-image: url('hotd-viz/intro-cover.jpg');
+            /* Photo by Ricardo Gomez Angel on Unsplash */
+        }
+
+        .container[data-background="hotd-viz/about-cover.jpg"]::before {
+            background-image: url('hotd-viz/about-cover.jpg');
+            /* Photo by Thom Holmes on Unsplash */
+        }
+
+        .container[data-background="hotd-viz/word-count-cover.jpg"]::before {
+            background-image: url('hotd-viz/word-count-cover.jpg');
+            /* Photo by Joshua Hoehne on Unsplash */
+        }
+
+        .container[data-background="hotd-viz/character-network-cover.jpg"]::before {
+            background-image: url('hotd-viz/character-network-cover.jpg');
+            /* Photo by Omar Flores on Unsplash */
+        }
+
+        .container[data-background="hotd-viz/delve-in-deep-cover.jpg"]::before {
+            background-image: url('hotd-viz/delve-in-deep-cover.jpg');
+            /* Photo by Aaron Burden on Unsplash */
+        }
+
+        .container[data-background="hotd-viz/bts-cover.jpg"]::before {
+            background-image: url('hotd-viz/bts-cover.jpg');
+            /* Photo by Markus Spiske on Unsplash */
         }
 
         h1 {
@@ -85,36 +130,36 @@
         <a href="hotd-viz/behind-the-scenes.html">Behind the Scenes</a>
     </div>
 
-    <div class="container" id="intro">
+    <div class="container" id="intro" data-background="hotd-viz/intro-cover.jpg">
         <h1>A HOTD Visualization</h1>
         <p>Welcome to our House of the Dragon data visualizations project. Explore the world of House of the Dragon through interactive visualizations and insights.</p>
     </div>
 
-    <div class="container" id="about">
+    <div class="container" id="about" data-background="hotd-viz/about-cover.jpg">
         <h1>About This Project</h1>
         <p>Learn more about our interactive visualizations.</p>
         <a class="button" href="hotd-viz/about.html">Get Started</a>
     </div>
 
-    <div class="container" id="word-count">
+    <div class="container" id="word-count" data-background="hotd-viz/word-count-cover.jpg">
         <h1>Word Count</h1>
         <p>Discover the word count data for the entire first season of House of the Dragon.</p>
         <a class="button" href="hotd-viz/word-count.html">Explore Now</a>
     </div>
 
-    <div class="container" id="character-network">
+    <div class="container" id="character-network" data-background="hotd-viz/character-network-cover.jpg">
         <h1>Character Network</h1>
         <p>Uncover the character network analysis for House of the Dragon and dive into the relationships among the characters.</p>
         <a class="button" href="hotd-viz/character-network.html">Explore Now</a>
     </div>
 
-    <div class="container" id="delve-in-deep">
+    <div class="container" id="delve-in-deep" data-background="hotd-viz/delve-in-deep-cover.jpg">
         <h1>Delve in Deep</h1>
         <p>Take a deep dive into the data and gain deeper insights into the meaning behind it.</p>
         <a class="button" href="hotd-viz/delve-in-deep.html">Explore Now</a>
     </div>
 
-    <div class="container" id="behind-the-scenes">
+    <div class="container" id="behind-the-scenes" data-background="hotd-viz/bts-cover.jpg">
         <h1>Behind the Scenes</h1>
         <p>Peek behind the scenes and see how the magic is made!</p>
         <a class="button" href="hotd-viz/behind-the-scenes.html">Explore Now</a>
