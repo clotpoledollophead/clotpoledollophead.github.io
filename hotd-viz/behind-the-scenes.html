@@ -147,6 +147,7 @@
             How did the script of a TV show become these visually appealing graphs, tables, and networks
             instead of being a whole (<b>very</b> large) bunch of words?
         </p>
+        <h2>Documenting the Data</h2>
         <p>
             Well, it all started with watching the <i>House of the Dragon</i> itself.
         </p>
@@ -278,11 +279,127 @@
         <p>
             Then, I saved all my files in Microsoft Excel to .csv files.
             (Why I didn't just write code to convert the files: 
-            there's already an application to help me, so why do more work myself?)
+            there's already an application to help me, so why do more work myself?) 
+            Anyways, here's the button that leads to the raw .csv files for fun!
         </p>
         <p>
-            Anyways, here's the button that leads to the raw .csv files for fun!
-            <a class="button" href="hotd-viz/data-vault.html">Explore Now</a>
+            <a class="button" href="data-vault.html">THIS BUTTON</a>
+        </p>
+        
+    </div>
+    <h2>Drawing Graphs and Whatnot</h2>
+    <div>
+        <p>
+            After saving my CSV files, a process that I take no great amusement in, 
+            I then run these bad boys that I'm about to show you.
+        </p>
+        <p>
+            Exhibit A: Code to draw a bar graph for top ten most common words for each and all characters.
+            <pre>
+                <code>
+                    import matplotlib.pyplot as plt
+    
+                    # Create a bar plot for each file
+                    for file, word_counts in individual_word_counts.items():
+                        df = pd.DataFrame(word_counts, columns=["Word", "Count"])
+    
+                        # Sort the word counts by frequency in ascending order
+                        df = df.sort_values(["Count", "Word"], ascending=[True, True], ignore_index=True)
+    
+                        # Select only the top 10 most used words
+                        top_10_words = df.tail(10)
+    
+                        # Sort the top 10 words by count in ascending order
+                        top_10_words = top_10_words.sort_values("Count", ascending=True)
+    
+                        # Plot a horizontal bar chart
+                        plt.figure()
+                        plt.barh(top_10_words["Word"], top_10_words["Count"])  # Use barh instead of bar
+                        plt.xlabel("Count")  # Swap x-axis and y-axis labels
+                        plt.ylabel("Word")
+                        plt.title(f"Top 10 Word Counts in {file}")
+                        plt.show()
+    
+                    # Sort the combined word counts by count in ascending order
+                    df_combined = df_combined.sort_values("Count", ascending=True)
+    
+                    # Select only the top 10 most used words
+                    df_combined = df_combined.tail(10)
+    
+                    # Create a bar plot for combined word counts
+                    plt.figure()
+                    plt.barh(df_combined["Word"], df_combined["Count"])  # Use barh instead of bar
+                    plt.xlabel("Count")  # Swap x-axis and y-axis labels
+                    plt.ylabel("Word")
+                    plt.title("Top 10 Combined Word Counts of All Text Files")
+                    plt.show()
+                </code>
+            </pre>
+        </p>
+        <p>
+            This all seemed really cool, until I realized that there were a bunch of stopwords—
+            words like <b>the</b>, <b>a</b>, <b>and</b>, and the sort—
+            and that was not what I was looking for.
+        </p>
+        <p>
+            So, here is Exhibit B, a revamped version that can remove the stopwords!
+        </p>
+        <p>
+            <pre>
+                <code>
+                    import matplotlib.pyplot as plt
+                    from nltk.corpus import stopwords
+
+                    # Get the set of stopwords
+                    stopwords_set = set(stopwords.words('english'))
+
+                    # Remove stopwords from individual word counts
+                    for file, word_counts in individual_word_counts.items():
+                        word_counts = [(word, count) for word, count in word_counts if word not in stopwords_set]
+                        individual_word_counts[file] = word_counts
+
+                    # Combine the word counts of all text files
+                    combined_word_counts = Counter()
+                    for word_counts in individual_word_counts.values():
+                        combined_word_counts += Counter(dict(word_counts))
+
+                    # Sort the combined word counts by count in ascending order
+                    df_combined = pd.DataFrame(combined_word_counts.items(), columns=["Word", "Count"])
+                    df_combined = df_combined.sort_values("Count", ascending=True)
+
+                    # Select only the top 10 most used words
+                    df_combined = df_combined.tail(10)
+
+                    # Create a bar plot for combined word counts
+                    plt.figure()
+                    plt.barh(df_combined["Word"], df_combined["Count"])  # Use barh instead of bar
+                    plt.xlabel("Count")  # Swap x-axis and y-axis labels
+                    plt.ylabel("Word")
+                    plt.title("Top 10 Combined Word Counts of All Text Files")
+                    plt.show()
+
+                    # Create a bar plot for each file
+                    for file, word_counts in individual_word_counts.items():
+                        df = pd.DataFrame(word_counts, columns=["Word", "Count"])
+
+                        # Sort the word counts by frequency in ascending order
+                        df = df.sort_values(["Count", "Word"], ascending=[True, True], ignore_index=True)
+
+                        # Select only the top 10 most used words
+                        top_10_words = df.tail(10)
+
+                        # Sort the top 10 words by count in ascending order
+                        top_10_words = top_10_words.sort_values("Count", ascending=True)
+
+                        # Plot a horizontal bar chart
+                        plt.figure()
+                        plt.barh(top_10_words["Word"], top_10_words["Count"])  # Use barh instead of bar
+                        plt.xlabel("Count")  # Swap x-axis and y-axis labels
+                        plt.ylabel("Word")
+                        plt.title(f"Top 10 Word Counts in {file}")
+                        plt.show()
+                </code>
+            </pre>
         </p>
     </div>
     
