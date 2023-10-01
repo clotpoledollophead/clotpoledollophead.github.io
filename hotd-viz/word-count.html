@@ -50,7 +50,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin: 5%;
         }
 
         /* Style individual graph containers */
@@ -58,32 +58,21 @@
             width: 45%; /* Adjust the width as needed */
             margin-bottom: 10px;
         }
-
     </style>
 </head>
 <body>
     <div class="container">
         <h1>WORD COUNT</h1>
     </div>
-    <!-- Section 1 -->
-    <h2>Section 1</h2>
     <div class="subsection">
         <canvas id="graph1"></canvas>
         <canvas id="graph2"></canvas>
         <!-- Add more graphs as needed -->
     </div>
 
-    <!-- Section 2 -->
-    <h2>Section 2</h2>
-    <div class="subsection">
-        <canvas id="graph3"></canvas>
-        <canvas id="graph4"></canvas>
-        <!-- Add more graphs as needed -->
-    </div>
-
     <!-- JavaScript to create and configure graphs -->
     <script>
-        function createBarChart(canvasId, graph) {
+        function createBarChart(canvasId, graph, chartTitle) {
             var ctx = document.getElementById(canvasId).getContext('2d');
             var chart = new Chart(ctx, {
                 type: 'bar',
@@ -93,62 +82,62 @@
                         data: graph.data,
                         backgroundColor: graph.backgroundColor,
                         borderColor: graph.borderColor,
-                        borderWidth: 1
+                        borderWidth: 1,
+                        label: '' // Empty label to hide legend entry for this dataset
                     }]
                 },
                 options: {
                     scales: {
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Frequency'
+                            }
+                        },
+                        x: { // Configuration for the x-axis
+                            title: {
+                                display: true,
+                                text: 'Words' // Set the label for the x-axis
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // Set the display property to false to hide the legend
+                        },
+                        title: {
+                            display: true,
+                            text: chartTitle // Set the title for the entire graph using the provided chartTitle
                         }
                     }
                 }
             });
         }
-
+        
         // Sample data for the graphs
-        var section1Graphs = [
+        var graphs = [
             {
-                labels: ['Category A', 'Category B', 'Category C'],
-                data: [30, 50, 25],
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                borderColor: 'rgba(255, 99, 132, 1)'
+                labels: ['no', 'i', 'the', 'is', 'you', 'to', 'this', 'a', 'what', 'viserys'],
+                data: [13, 12, 11, 11, 9, 7, 7, 6, 5, 5],
+                backgroundColor: 'rgba(99, 88, 80, 0.5)',
+                borderColor: 'rgba(99, 88, 80, 1)'
             },
             {
-                labels: ['Label X', 'Label Y', 'Label Z'],
-                data: [40, 20, 35],
-                backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                borderColor: 'rgba(54, 162, 235, 1)'
-            },
-            // Add more graphs as needed
+                labels: ['you', 'i', 'to', 'a', 'your', 'what', 'the', 'is', 'in', 'grace'],
+                data: [9, 8, 7, 7, 5, 4, 4, 4, 4, 4],
+                backgroundColor: 'rgba(77, 67, 57, 0.5)',
+                borderColor: 'rgba(77, 67, 57, 1)'
+            }
         ];
+        
+        // Define unique titles for each graph
+        var graphTitles = ['Aemma Targaryen, Episode 1', 'Alicent Hightower, Episode 1'];
 
-        var section2Graphs = [
-            {
-                labels: ['Item 1', 'Item 2', 'Item 3'],
-                data: [15, 30, 45],
-                backgroundColor: 'rgba(255, 206, 86, 0.5)',
-                borderColor: 'rgba(255, 206, 86, 1)'
-            },
-            {
-                labels: ['Apple', 'Banana', 'Cherry'],
-                data: [10, 60, 20],
-                backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                borderColor: 'rgba(75, 192, 192, 1)'
-            },
-            // Add more graphs as needed
-        ];
-
-        // Create and configure the graphs for Section 1
-        section1Graphs.forEach(function(graph, index) {
+        // Create and configure the graphs
+        graphs.forEach(function(graph, index) {
             var canvasId = 'graph' + (index + 1); // Unique canvas ID for each graph
-            createBarChart(canvasId, graph);
-        });
-
-        // Create and configure the graphs for Section 2
-        section2Graphs.forEach(function(graph, index) {
-            var canvasId = 'graph' + (index + section1Graphs.length + 1); // Unique canvas ID for each graph
-            createBarChart(canvasId, graph);
+            createBarChart(canvasId, graph, graphTitles[index]); // Set the individual chart title here
         });
     </script>
 </body>
