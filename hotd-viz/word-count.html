@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your GitHub Pages Site</title>
+    <title>Word Count</title>
+    <!-- Include Chart.js from a CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,12 +44,112 @@
         .button:hover {
             background-color: #800000;
         }
+
+        /* Style the subsection containers */
+        .subsection {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        /* Style individual graph containers */
+        .subsection canvas {
+            width: 45%; /* Adjust the width as needed */
+            margin-bottom: 10px;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Word Count</h1>
-        <p>This webpage is under construction. Please visit again later.</p>
+        <h1>WORD COUNT</h1>
     </div>
+    <!-- Section 1 -->
+    <h2>Section 1</h2>
+    <div class="subsection">
+        <canvas id="graph1"></canvas>
+        <canvas id="graph2"></canvas>
+        <!-- Add more graphs as needed -->
+    </div>
+
+    <!-- Section 2 -->
+    <h2>Section 2</h2>
+    <div class="subsection">
+        <canvas id="graph3"></canvas>
+        <canvas id="graph4"></canvas>
+        <!-- Add more graphs as needed -->
+    </div>
+
+    <!-- JavaScript to create and configure graphs -->
+    <script>
+        function createBarChart(canvasId, graph) {
+            var ctx = document.getElementById(canvasId).getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: graph.labels,
+                    datasets: [{
+                        data: graph.data,
+                        backgroundColor: graph.backgroundColor,
+                        borderColor: graph.borderColor,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Sample data for the graphs
+        var section1Graphs = [
+            {
+                labels: ['Category A', 'Category B', 'Category C'],
+                data: [30, 50, 25],
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: 'rgba(255, 99, 132, 1)'
+            },
+            {
+                labels: ['Label X', 'Label Y', 'Label Z'],
+                data: [40, 20, 35],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)'
+            },
+            // Add more graphs as needed
+        ];
+
+        var section2Graphs = [
+            {
+                labels: ['Item 1', 'Item 2', 'Item 3'],
+                data: [15, 30, 45],
+                backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                borderColor: 'rgba(255, 206, 86, 1)'
+            },
+            {
+                labels: ['Apple', 'Banana', 'Cherry'],
+                data: [10, 60, 20],
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)'
+            },
+            // Add more graphs as needed
+        ];
+
+        // Create and configure the graphs for Section 1
+        section1Graphs.forEach(function(graph, index) {
+            var canvasId = 'graph' + (index + 1); // Unique canvas ID for each graph
+            createBarChart(canvasId, graph);
+        });
+
+        // Create and configure the graphs for Section 2
+        section2Graphs.forEach(function(graph, index) {
+            var canvasId = 'graph' + (index + section1Graphs.length + 1); // Unique canvas ID for each graph
+            createBarChart(canvasId, graph);
+        });
+    </script>
 </body>
 </html>
