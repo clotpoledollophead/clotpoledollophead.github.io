@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Count</title>
+    <!-- Include Chart.js from a CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu {
+                    background-color: #000000;
+                    width: 100%; /* Make the menu span the entire width */
+                    height: 50px;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+                    color: #fff;
+                    z-index: 1;
+                }
+
+        .menu a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .menu a:hover {
+            background-color: #555; /* Darker background color on hover */
+        }
+
+        .menu-container {
+            display: inline-block; /* Ensure the container only takes the necessary space */
+            position: relative; /* Add position relative for submenu positioning */
+        }
+        
+        #menu-icon {
+            cursor: pointer;
+            font-size: 24px;
+            padding: 0 10px;
+        }
+        
+        /* Updated styles for the submenu */
+        .submenu {
+            background-color: #333; /* Dark background color */
+            width: 200px;
+            height: 0;
+            overflow: hidden;
+            position: absolute;
+            left: 50%;
+            transform: translateX(40%);
+            top: 150%; /* Adjust the top property to move the submenu lower */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            z-index: 1;
+            transition: height 0.3s ease, opacity 0.3s ease;
+            visibility: hidden;
+            opacity: 0;
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Drop shadow for a raised effect */
+        }
+
+        /* Style each submenu item */
+        .submenu a {
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #fff;
+            transition: background-color 0.3s ease; /* Smooth background color transition on hover */
+        }
+
+        /* Hover effect for submenu items */
+        .submenu a:hover {
+            background-color: #555; /* Darker background color on hover */
+        }
+        
+        .submenu-trigger:hover + .submenu,
+        .submenu:hover {
+            height: auto;
+            overflow-y: auto;
+            visibility: visible;
+            opacity: 1; /* Add opacity: 1 to show submenu with fade-in effect */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #B22222;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #800000;
+        }
+
+        /* Style the subsection containers */
+        .episodeGraph {
+            display: flex; /* Use Flexbox */
+            flex-wrap: wrap; /* Allow items to wrap to the next row */
+            justify-content: space-between;
+            margin: 5%;
+        }
+
+        /* Style individual graph containers */
+        .episodeGraph canvas {
+            flex: 0 0 calc(50% - 20px); /* Set each graph to occupy 50% of the container width with some spacing */
+            margin-bottom: 10px;
+            max-height: 400px;
+            max-width: 600px;
+        }
+
+        /* Media query for responsive layout */
+        @media (max-width: 768px) {
+            .episodeGraph canvas {
+                flex: 0 0 calc(100% - 20px); /* When the screen width is <= 768px, each graph occupies 100% of the container width */
+            }
+        }
+
+        #menu-icon {
+            cursor: pointer; /* Change the cursor to a pointer when hovering over the icon */
+            font-size: 24px; /* Adjust the font size as needed */
+            padding: 0 10px; /* Add some spacing around the icon */
+            position: relative; /* Add position relative to make room for the submenu */
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <a href="../hotd-viz.html">Home</a>
+        <a href="../about.html">About</a>
+        <a href="../word-count.html" class="submenu-trigger">Word Count</a>
+        <a href="../character-network.html">Character Network</a>
+        <a href="../delve-in-deep.html">Delve in Deep</a>
+        <a href="../behind-the-scenes.html">Behind the Scenes</a>
+    </div>
+    <div class="menu-container">
+        <span id="menu-icon">&#9776;</span> <!-- Hamburger menu icon -->
+        <div class="submenu">
+            <a href="word-count/word-count-ep1n.html">E1</a>
+            <a href="word-count/word-count-ep1s.html">E1 - Stop Words Removed</a>
+            <!-- Add more episode links as needed -->
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>WORD COUNT</h1>
+        <h2>Episode 1</h2>
+    </div>
+    
+    <div class="episodeGraph" id="episode1">
+        <canvas id="graph1"></canvas>
+        <canvas id="graph2"></canvas>
+        <canvas id="graph3"></canvas>
+        <canvas id="graph4"></canvas>
+        <canvas id="graph5"></canvas>
+        <canvas id="graph6"></canvas>
+        <canvas id="graph7"></canvas>
+        <canvas id="graph8"></canvas>
+        <canvas id="graph9"></canvas>
+        <canvas id="graph10"></canvas>
+        <canvas id="graph11"></canvas>
+        <canvas id="graph12"></canvas>
+        <canvas id="graph13"></canvas>
+        <canvas id="graph14"></canvas>
+        <canvas id="graph15"></canvas>
+        <canvas id="graph16"></canvas>
+        <canvas id="graph17"></canvas>
+        <canvas id="graph18"></canvas>
+        <canvas id="graph19"></canvas>
+        <canvas id="graph20"></canvas>
+        <canvas id="graph21"></canvas>
+        <canvas id="graph22"></canvas>
+        <canvas id="graph23"></canvas>
+        <canvas id="graph24"></canvas>
+        <canvas id="graph25"></canvas>
+        <canvas id="graph26"></canvas>
+        <canvas id="graph27"></canvas>
+        <!-- Add more graphs as needed -->
+    </div>
+
+    <!-- JavaScript to create and configure graphs -->
+    <script>
+        function createBarChart(canvasId, graph, chartTitle) {
+            var ctx = document.getElementById(canvasId).getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: graph.labels,
+                    datasets: [{
+                        data: graph.data,
+                        backgroundColor: graph.backgroundColor,
+                        borderColor: graph.borderColor,
+                        borderWidth: 1,
+                        label: '' // Empty label to hide legend entry for this dataset
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Frequency'
+                            }
+                        },
+                        x: { // Configuration for the x-axis
+                            title: {
+                                display: true,
+                                text: 'Words' // Set the label for the x-axis
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // Set the display property to false to hide the legend
+                        },
+                        title: {
+                            display: true,
+                            text: chartTitle // Set the title for the entire graph using the provided chartTitle
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Sample data for the graphs
+        var graphs = [
+            {
+                labels: ['no', 'i', 'the', 'is', 'you', 'to', 'this', 'a', 'what', 'viserys'],
+                data: [13, 12, 11, 11, 9, 7, 7, 6, 5, 5],
+                backgroundColor: 'rgba(130,190,244, 0.5)',
+                borderColor: 'rgba(130,190,244, 1)' // house arryn colors: (130,190,244)
+            },
+            {
+                labels: ['you', 'i', 'to', 'a', 'your', 'what', 'the', 'is', 'in', 'grace'],
+                data: [9, 8, 7, 7, 5, 4, 4, 4, 4, 4],
+                backgroundColor: 'rgba(1, 50, 32, 0.5)',
+                borderColor: 'rgba(1, 50, 32, 1)' // house hightower colors: (1, 50, 32)
+            },
+            {
+                labels: ['no'],
+                data: [6],
+                backgroundColor: 'rgba(128, 70, 27, 0.5)',
+                borderColor: 'rgba(128, 70, 27, 1)' // normal people color: (128, 70, 27)
+            },
+            {
+                labels: ['the', 'and', 'to', 'of', 'this', 'i', 'his', 'has', 'a', 'your'],
+                data: [18, 8, 7, 7, 5, 5, 4, 4, 4, 3],
+                backgroundColor: 'rgba(32, 178, 170, 0.5)',
+                borderColor: 'rgba(32, 178, 170, 1)' // house velaryon colors: (32, 178, 170)
+            },
+            {
+                labels: ['yield', 'princess', 'was', 'to', 'the', 'spear', 'i', 'hoping', 'for', 'favor'],
+                data: [2, 2, 1 ,1, 1, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(1, 50, 32, 0.5)',
+                borderColor: 'rgba(1, 50, 32, 1)' // cole is team green, (1, 50, 32)
+            },
+            {
+                labels: ['you', 'the', 'your', 'to', 'of', 'for', 'i', 'and', 'my', 'all'],
+                data: [20, 20, 12, 12, 11, 10, 9, 9, 6, 5],
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                borderColor: 'rgba(0, 0, 0, 1)' // house targaryen colors: (0, 0, 0)
+            },
+            {
+                labels: ['dohaerās', 'umbās', 'syrax', 'rȳbās', 'naejot'],
+                data: [2, 1, 1, 1, 1],
+                backgroundColor: 'rgba(128, 70, 27, 0.5)',
+                borderColor: 'rgba(128, 70, 27, 1)' // normal people color: (128, 70, 27)
+            },
+            {
+                labels: ['up', 'thief', 'the', 'raper', 'on', 'murderer', 'get', 'floor', 'commander'],
+                data: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                borderColor: 'rgba(0, 0, 0, 1)' // gold gloaks are team black: (0, 0, 0)
+            },
+            {
+                labels: ['the', 'that', 'i', 'of', 'back', 'your', 'you', 'welcome', 'was', 'spoiled'],
+                data: [3, 3, 3, 2, 2, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(224, 224, 224, 0.5)',
+                borderColor: 'rgba(224, 224, 224, 1)' // kingsguard color: (224, 224, 224)
+            },
+            {
+                labels: ['the', 'of', 'his', 'your', 'watch', 're', 'on', 'might', 'is', 'in'],
+                data: [8, 4, 3, 2, 2, 2, 2, 2, 2, 2],
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                borderColor: 'rgba(0, 0, 0, 1)' // team black: (0, 0, 0)
+            },
+            {
+                labels: ['to', 'viserys', 'promise', 'king', 'i', 'faithful', 'boremund', 'be', 'baratheon'],
+                data: [2, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(255, 215, 0, 0.5)',
+                borderColor: 'rgba(255, 215, 0, 1)' // house baratheon: (255, 215, 0)
+            },
+            {
+                labels: ['the', 'and', 'to', 'of', 'i', 'them', 'without', 'voice', 'viserys', 'this'],
+                data: [5, 5, 3, 3, 3, 2, 1, 1, 1, 1],
+                backgroundColor: 'rgba(1, 50, 32, 0.5)',
+                borderColor: 'rgba(1, 50, 32, 1)' // house hightower: (1, 50, 32)
+            },
+            {
+                labels: ['winterfell', 'stark', 'rickon', 'of', 'lord', 'i'],
+                data: [1, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(128, 128, 128, 0.5)',
+                borderColor: 'rgba(128, 128, 128, 1)' // house stark: (128, 128, 128)
+            },
+            {
+                labels: ['to', 'the', 'wound', 'we\'ve', 'they', 'that', 'texts', 'suggest', 'similar', 'sent'],
+                data: [2, 2, 1, 1, 1, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(105, 105, 105, 0.5)',
+                borderColor: 'rgba(105, 105, 105, 1)' // maesters: (105, 105, 105)
+            },
+            {
+                labels: ['prince', 'of', 'lords', 'viserys', 'vassal', 'that', 'targaryen', 'seven', 'paramount'],
+                data: [2, 2, 2, 1, 1, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(128, 70, 27, 0.5)',
+                borderColor: 'rgba(128, 70, 27, 1)' // normal people color: (128, 70, 27)
+            },
+            {
+                labels: ['your', 'will', 'speak', 'silence', 'quiet', 'prince'],
+                data: [1, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(128, 70, 27, 0.5)',
+                borderColor: 'rgba(128, 70, 27, 1)' // normal people color: (128, 70, 27)
+            },
+            {
+                labels: ['the', 'it', 'a', 'your' ,'of', 'we', 'to', 'grace', 'is', 'you'],
+                data: [25, 9, 9, 8, 8, 7, 7, 7, 6, 5],
+                backgroundColor: 'rgba(105, 105, 105, 0.5)',
+                borderColor: 'rgba(105, 105, 105, 1)' // maesters: (105, 105, 105)
+            },
+            {
+                labels: ['you', 'i', 'the', 'of', 'could', 'with', 'wielder', 'what', 'we', 'troubles'],
+                data: [3, 3, 2, 2, 2, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                borderColor: 'rgba(0, 0, 0, 1)' // team black: (0, 0, 0)
+            },
+            {
+                labels: ['the', 'your', 'of', 'to', 'a', 'is', 'i', 'it', 'grace', 'you'],
+                data: [35, 20, 18, 15, 14, 12, 10, 9, 9, 8],
+                backgroundColor: 'rgba(1, 50, 32, 0.5)',
+                borderColor: 'rgba(1, 50, 32, 1)' // house hightower: (1, 50, 32)
+            },
+            {
+                labels: ['the', 'to', 'you', 'i', 'a', 'of', 'and', 'as', 'that', 'ser'],
+                data: [23, 19, 11, 11, 10, 9, 7, 6, 5, 5],
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                borderColor: 'rgba(0, 0, 0, 1)' // house targaryen: (0, 0, 0)
+            },
+            {
+                labels: ['and', 'to', 'with', 'war', 'them', 'the', 'if', 'it\'s', 'full', 'as'],
+                data: [4, 3, 2, 2, 2, 2, 2, 2, 2, 2],
+                backgroundColor: 'rgba(32, 178, 170, 0.5)',
+                borderColor: 'rgba(32, 178, 170, 1)' // house velaryon: (32, 178, 170)
+            },
+            {
+                labels: ['your', 'the', 'lady', 'hightower', 'grace', 'alicent'],
+                data: [1, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(224, 224, 224, 0.5)',
+                borderColor: 'rgba(224, 224, 224, 1)' // kingsguard color: (224, 224, 224)
+            },
+            {
+                labels: ['i', 'would', 'the', 'it', 'who', 'was', 'thought', 'targaryen', 'take', 'rhaenys'],
+                data: [4, 2, 2, 2, 1, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(255, 215, 0, 0.5)',
+                borderColor: 'rgba(255, 215, 0, 1)' // house baratheon: (255, 215, 0)
+            },
+            {
+                labels: ['of', 'prince', 'the', 'targaryen', 'daemon', 'ser', 'will', 'now', 'his', 'first'],
+                data: [7, 5, 4, 4, 4, 3, 2, 2, 2, 2],
+                backgroundColor: 'rgba(128, 70, 27, 0.5)',
+                borderColor: 'rgba(128, 70, 27, 1)' // normal people color: (128, 70, 27)
+            },
+            {
+                labels: ['kill', 'him'],
+                data: [1, 1],
+                backgroundColor: 'rgba(128, 70, 27, 0.5)',
+                borderColor: 'rgba(128, 70, 27, 1)' // normal people color: (128, 70, 27)
+            },
+            {
+                labels: ['the', 'you', 'to', 'of', 'i', 'and', 'be', 'a', 'my', 'it'],
+                data: [69, 41, 34, 34, 34, 31, 29, 23, 22, 18, 18],
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                borderColor: 'rgba(0, 0, 0, 1)' // house targaryen: (0, 0, 0)
+            },
+            {
+                labels: ['the', 'to', 'of', 'you', 'i', 'a', 'and', 'your', 'is', 'it'],
+                data: [242, 124, 117, 111, 105, 85, 84, 68, 58, 54],
+                backgroundColor: 'rgba(136, 8, 8, 0.5)',
+                borderColor: 'rgba(136, 8, 8, 1)' // entire episode: (136, 8, 8)
+            }
+        ];
+        
+        // Define unique titles for each graph
+        var graphTitles = ['Aemma Arryn, Episode 1', 'Alicent Hightower, Episode 1', 'Citizens, Episode 1',
+         'Corlys Velaryon, Episode 1', 'Criston Cole, Episode 1', 'Daemon Targaryen, Episode 1', 'Dragonkeepers, Episode 1', 
+         'The City Watch of King\'s Landing, Episode 1', 'Harrold Westerling, Episode 1', 'Lyman Beesbury, Episode 1', 
+         'Boremund Baratheon, Episode 1', 'Hobert Hightower, Episode 1', 'Rickon Stark, Episode 1', 'Maesters, Episode 1', 
+         'Random Man, Episode 1', 'Man at Brothel, Episode 1', 'Mellos, Episode 1', 'Mysaria, Episode 1', 'Otto Hightower, Episode 1', 
+         'Rhaenyra Targaryen, Episode 1', 'Rhaenys Targaryen, Episode 1', 'Ryam Redwyne, Episode 1', 'Unnamed Baratheon, Episode 1', 
+         'Tourney Announcer, Episode 1', 'Tourney Audience, Episode 1', 'Viserys I Targaryen, Episode 1', 'Episode 1 (Full)'];
+
+        // Create and configure the graphs
+        graphs.forEach(function(graph, index) {
+            var canvasId = 'graph' + (index + 1); // Unique canvas ID for each graph
+            createBarChart(canvasId, graph, graphTitles[index]); // Set the individual chart title here
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const submenuTrigger = document.querySelector(".submenu-trigger");
+            const submenu = document.querySelector(".submenu");
+    
+            submenuTrigger.addEventListener("mouseover", function () {
+                submenu.style.height = "auto";
+                submenu.style.overflowY = "auto";
+                submenu.style.visibility = "visible";
+                submenu.style.opacity = "1";
+            });
+    
+            submenu.addEventListener("mouseleave", function () {
+                submenu.style.height = "0";
+                submenu.style.overflowY = "hidden";
+                submenu.style.visibility = "hidden";
+                submenu.style.opacity = "0";
+            });
+        });
+    </script>
+</body>
+</html>
