@@ -14,6 +14,26 @@
             padding: 0;
         }
 
+.menu {
+            background-color: #000000;
+            width: 100%; /* Make the menu span the entire width */
+            height: 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            color: #fff;
+            z-index: 1;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+        }
+
         .container {
             display: flex;
             flex-direction: column;
@@ -70,6 +90,13 @@
     </style>
 </head>
 <body>
+    <div class="menu">
+        <a href="../hotd-viz.html">Home</a>
+        <a href="../about.html">About</a>
+        <a href="../character-network.html">Character Network</a>
+        <a href="../delve-in-deep.html">Delve in Deep</a>
+        <a href="../behind-the-scenes.html">Behind the Scenes</a>
+    </div>
     <div class="container">
         <h1>WORD COUNT</h1>
     </div>
