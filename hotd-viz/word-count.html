@@ -46,7 +46,7 @@
         }
 
         /* Style the subsection containers */
-        .subsection {
+        .episodeGraph {
             display: flex; /* Use Flexbox */
             flex-wrap: wrap; /* Allow items to wrap to the next row */
             justify-content: space-between;
@@ -54,16 +54,16 @@
         }
 
         /* Style individual graph containers */
-        .subsection canvas {
+        .episodeGraph canvas {
             flex: 0 0 calc(50% - 20px); /* Set each graph to occupy 50% of the container width with some spacing */
             margin-bottom: 10px;
-            max-height: 300px;
-            max-width: 500px;
+            max-height: 400px;
+            max-width: 600px;
         }
 
         /* Media query for responsive layout */
         @media (max-width: 768px) {
-            .subsection canvas {
+            .episodeGraph canvas {
                 flex: 0 0 calc(100% - 20px); /* When the screen width is <= 768px, each graph occupies 100% of the container width */
             }
         }
@@ -73,9 +73,13 @@
     <div class="container">
         <h1>WORD COUNT</h1>
     </div>
-    <div class="subsection">
+    <div class="episodeGraph">
         <canvas id="graph1"></canvas>
         <canvas id="graph2"></canvas>
+        <canvas id="graph3"></canvas>
+        <canvas id="graph4"></canvas>
+        <canvas id="graph5"></canvas>
+        <canvas id="graph6"></canvas>
         <!-- Add more graphs as needed -->
     </div>
 
@@ -129,19 +133,44 @@
             {
                 labels: ['no', 'i', 'the', 'is', 'you', 'to', 'this', 'a', 'what', 'viserys'],
                 data: [13, 12, 11, 11, 9, 7, 7, 6, 5, 5],
-                backgroundColor: 'rgba(99, 88, 80, 0.5)',
-                borderColor: 'rgba(99, 88, 80, 1)'
+                backgroundColor: 'rgba(130,190,244, 0.5)',
+                borderColor: 'rgba(130,190,244, 1)' // house arryn colors: (130,190,244)
             },
             {
                 labels: ['you', 'i', 'to', 'a', 'your', 'what', 'the', 'is', 'in', 'grace'],
                 data: [9, 8, 7, 7, 5, 4, 4, 4, 4, 4],
-                backgroundColor: 'rgba(77, 67, 57, 0.5)',
-                borderColor: 'rgba(77, 67, 57, 1)'
+                backgroundColor: 'rgba(1, 50, 32, 0.5)',
+                borderColor: 'rgba(1, 50, 32, 1)' // house hightower colors: (1, 50, 32)
+            },
+            {
+                labels: ['no'],
+                data: [6],
+                backgroundColor: 'rgba(128, 70, 27, 0.5)',
+                borderColor: 'rgba(128, 70, 27, 1)' // normal people color: (128, 70, 27)
+            },
+            {
+                labels: ['the', 'and', 'to', 'of', 'this', 'i', 'his', 'has', 'a', 'your'],
+                data: [18, 8, 7, 7, 5, 5, 4, 4, 4, 3],
+                backgroundColor: 'rgba(32, 178, 170, 0.5)',
+                borderColor: 'rgba(32, 178, 170, 1)' // house velaryon colors: (32, 178, 170)
+            },
+            {
+                labels: ['yield', 'princess', 'was', 'to', 'the', 'spear', 'i', 'hoping', 'for', 'favor'],
+                data: [2, 2, 1 ,1, 1, 1, 1, 1, 1, 1],
+                backgroundColor: 'rgba(1, 50, 32, 0.5)',
+                borderColor: 'rgba(1, 50, 32, 1)' // cole is team green, (1, 50, 32)
+            },
+            {
+                labels: ['you', 'the', 'your', 'to', 'of', 'for', 'i', 'and', 'my', 'all'],
+                data: [20, 20, 12, 12, 11, 10, 9, 9, 6, 5],
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                borderColor: 'rgba(0, 0, 0, 1)' // house targaryen colors: (0, 0, 0)
             }
         ];
         
         // Define unique titles for each graph
-        var graphTitles = ['Aemma Targaryen, Episode 1', 'Alicent Hightower, Episode 1'];
+        var graphTitles = ['Aemma Targaryen, Episode 1', 'Alicent Hightower, Episode 1', 'Citizens, Episode 1',
+         'Corlys Velaryon, Episode 1', 'Criston Cole, Episode 1', 'Daemon Targaryen, Episode 1'];
 
         // Create and configure the graphs
         graphs.forEach(function(graph, index) {
