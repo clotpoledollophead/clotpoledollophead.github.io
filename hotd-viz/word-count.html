@@ -242,16 +242,13 @@
                 // Fetch the list of CSV files in the selected folder
                 fetch(`https://clotpoledollophead.github.io/hotd-viz/data/word-count/${selectedFolder}/`)
                     .then(response => response.text())
-                    .then(htmlData => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(htmlData, 'text/html');
-                        const links = doc.querySelectorAll('a');
-
-                        links.forEach(link => {
-                            const fileName = link.href.split('/').pop(); // Get the file name from the URL
+                    .then(textData => {
+                        const lines = textData.split('\n');
+                        lines.forEach(line => {
+                            const fileName = line.trim();
                             if (fileName.endsWith('.csv')) {
                                 const option = document.createElement('option');
-                                option.value = link.href;
+                                option.value = fileName;
                                 option.textContent = fileName;
                                 csvFileSelect.appendChild(option);
                             }
@@ -280,7 +277,9 @@
                         chart.remove();
                     });
                     // Display the selected graph
-                    readCSV(selectedFile, loadButton.previousElementSibling.id);
+                    const selectedFolder = folderSelect.value;
+                    const fileURL = `https://clotpoledollophead.github.io/hotd-viz/data/word-count/${selectedFolder}/${selectedFile}`;
+                    readCSV(fileURL, loadButton.previousElementSibling.id);
                 }
             });
         });
