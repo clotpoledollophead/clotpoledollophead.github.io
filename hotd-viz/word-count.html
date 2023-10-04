@@ -15,18 +15,18 @@
         }
 
         .menu {
-                    background-color: #000000;
-                    width: 100%; /* Make the menu span the entire width */
-                    height: 50px;
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    display: flex;
-                    justify-content: space-around;
-                    align-items: center;
-                    color: #fff;
-                    z-index: 1;
-                }
+            background-color: #000000;
+            width: 100%;
+            height: 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            color: #fff;
+            z-index: 1;
+        }
 
         .menu a {
             text-decoration: none;
@@ -35,30 +35,29 @@
         }
 
         .menu a:hover {
-            background-color: #555; /* Darker background color on hover */
+            background-color: #555;
         }
 
         .menu-container {
-            display: inline-block; /* Ensure the container only takes the necessary space */
-            position: relative; /* Add position relative for submenu positioning */
+            display: inline-block;
+            position: relative;
         }
-        
+
         #menu-icon {
             cursor: pointer;
             font-size: 24px;
             padding: 0 10px;
         }
-        
-        /* Updated styles for the submenu */
+
         .submenu {
-            background-color: #333; /* Dark background color */
+            background-color: #333;
             width: 200px;
             height: 0;
             overflow: hidden;
             position: absolute;
             left: 50%;
             transform: translateX(40%);
-            top: 150%; /* Adjust the top property to move the submenu lower */
+            top: 150%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -67,29 +66,27 @@
             transition: height 0.3s ease, opacity 0.3s ease;
             visibility: hidden;
             opacity: 0;
-            border-radius: 5px; /* Rounded corners */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Drop shadow for a raised effect */
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        /* Style each submenu item */
         .submenu a {
             padding: 10px 15px;
             text-decoration: none;
             color: #fff;
-            transition: background-color 0.3s ease; /* Smooth background color transition on hover */
+            transition: background-color 0.3s ease;
         }
 
-        /* Hover effect for submenu items */
         .submenu a:hover {
-            background-color: #555; /* Darker background color on hover */
+            background-color: #555;
         }
-        
+
         .submenu-trigger:hover + .submenu,
         .submenu:hover {
             height: auto;
             overflow-y: auto;
             visibility: visible;
-            opacity: 1; /* Add opacity: 1 to show submenu with fade-in effect */
+            opacity: 1;
         }
 
         .container {
@@ -123,34 +120,25 @@
             background-color: #800000;
         }
 
-        /* Style the subsection containers */
         .episodeGraph {
-            display: flex; /* Use Flexbox */
-            flex-wrap: wrap; /* Allow items to wrap to the next row */
+            display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             margin: 5%;
         }
 
-        /* Style individual graph containers */
         .episodeGraph canvas {
-            flex: 0 0 calc(50% - 20px); /* Set each graph to occupy 50% of the container width with some spacing */
+            flex: 0 0 calc(100% - 20px);
             margin-bottom: 10px;
             max-height: 400px;
             max-width: 600px;
         }
 
-        /* Media query for responsive layout */
-        @media (max-width: 768px) {
-            .episodeGraph canvas {
-                flex: 0 0 calc(100% - 20px); /* When the screen width is <= 768px, each graph occupies 100% of the container width */
-            }
-        }
-
         #menu-icon {
-            cursor: pointer; /* Change the cursor to a pointer when hovering over the icon */
-            font-size: 24px; /* Adjust the font size as needed */
-            padding: 0 10px; /* Add some spacing around the icon */
-            position: relative; /* Add position relative to make room for the submenu */
+            cursor: pointer;
+            font-size: 24px;
+            padding: 0 10px;
+            position: relative;
         }
     </style>
 </head>
@@ -164,34 +152,141 @@
         <a href="behind-the-scenes.html">Behind the Scenes</a>
     </div>
     <div class="menu-container">
-        <span id="menu-icon">&#9776;</span> <!-- Hamburger menu icon -->
+        <span id="menu-icon">&#9776;</span>
         <div class="submenu">
-            <a href="word-count/word-count-ep1n.html">E1</a>
-            <a href="word-count/word-count-ep1s.html">E1 - Stop Words Removed</a>
+            <a href="word-count/word-count-ep1n.html">Episode 1</a>
+            <a href="word-count/word-count-ep1s.html">Episode 1 - Stop Words Removed</a>
             <!-- Add more episode links as needed -->
         </div>
     </div>
     
     <div class="container">
         <h1>WORD COUNT</h1>
+        <div class="episodeGraph">
+            <div class="episode">
+                <h2>Episode</h2>
+                <select class="folderSelect">
+                    <option value="">Select a Folder</option>
+                    <option value="e1">Episode 1</option>
+                    <option value="e2">Episode 2</option>
+                    <option value="e3">Episode 3</option>
+                    <option value="e4">Episode 4</option>
+                    <option value="e5">Episode 5</option>
+                    <option value="e6">Episode 6</option>
+                    <option value="e7">Episode 7</option>
+                    <option value="e8">Episode 8</option>
+                    <option value="e9">Episode 9</option>
+                    <option value="e10">Episode 10</option>
+                </select>
+                <select class="csvFileSelect">
+                    <!-- Options for CSV files will be populated dynamically -->
+                </select>
+                <button class="loadButton button" disabled>Load Graph</button>
+                <canvas class="barChart" width="400" height="200"></canvas>
+            </div>
+            <!-- Add containers for other episodes as needed -->
+        </div>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const submenuTrigger = document.querySelector(".submenu-trigger");
-            const submenu = document.querySelector(".submenu");
-    
-            submenuTrigger.addEventListener("mouseover", function () {
-                submenu.style.height = "auto";
-                submenu.style.overflowY = "auto";
-                submenu.style.visibility = "visible";
-                submenu.style.opacity = "1";
+        // Function to read and parse CSV files
+        function readCSV(fileURL, canvasId) {
+            fetch(fileURL)
+                .then(response => response.text())
+                .then(csvData => {
+                    const data = parseCSV(csvData);
+                    createBarGraph(data, canvasId);
+                })
+                .catch(error => console.error(error));
+        }
+
+        // Function to parse CSV data
+        function parseCSV(csvData) {
+            const lines = csvData.split('\n');
+            const data = {
+                labels: [],
+                values: []
+            };
+
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line) {
+                    const parts = line.split(',');
+                    data.labels.push(parts[0]);
+                    data.values.push(parseInt(parts[1]));
+                }
+            }
+
+            return data;
+        }
+
+        // Function to create a bar graph
+        function createBarGraph(data, canvasId) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Count',
+                        data: data.values,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
             });
-    
-            submenu.addEventListener("mouseleave", function () {
-                submenu.style.height = "0";
-                submenu.style.overflowY = "hidden";
-                submenu.style.visibility = "hidden";
-                submenu.style.opacity = "0";
+        }
+
+        // Function to populate the second dropdown based on folder selection
+        function populateCSVFiles(folderSelect, csvFileSelect) {
+            csvFileSelect.innerHTML = ''; // Clear previous file options
+            const selectedFolder = folderSelect.value;
+
+            if (selectedFolder) {
+                // Fetch the list of CSV files in the selected folder
+                fetch(`https://clotpoledollophead.github.io/hotd-viz/data/word-count/${selectedFolder}/files.json`)
+                    .then(response => response.json())
+                    .then(files => {
+                        // Populate file options based on the fetched file list
+                        files.forEach(fileName => {
+                            const option = document.createElement('option');
+                            option.value = `https://clotpoledollophead.github.io/hotd-viz/data/word-count/${selectedFolder}/${fileName}.csv`;
+                            option.textContent = fileName;
+                            csvFileSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error(error));
+            }
+        }
+
+        // Event listeners
+        document.querySelectorAll('.folderSelect').forEach(folderSelect => {
+            const csvFileSelect = folderSelect.nextElementSibling; // Get the corresponding file select element
+            const loadButton = folderSelect.nextElementSibling.nextElementSibling; // Get the load button
+
+            folderSelect.addEventListener('change', function () {
+                populateCSVFiles(folderSelect, csvFileSelect);
+                // Enable or disable the load button based on folder selection
+                loadButton.disabled = !csvFileSelect.value;
+            });
+
+            loadButton.addEventListener('click', function () {
+                const selectedFile = csvFileSelect.value;
+                if (selectedFile) {
+                    // Remove existing canvas elements
+                    csvFileSelect.parentElement.querySelectorAll('.barChart').forEach(chart => {
+                        chart.remove();
+                    });
+                    // Display the selected graph
+                    readCSV(selectedFile, loadButton.previousElementSibling.id);
+                }
             });
         });
     </script>
