@@ -167,7 +167,7 @@
             <div class="episode">
                 <h2>Episode</h2>
                 <select class="folderSelect">
-                    <option value="">Select a Folder</option>
+                    <option value="">Select an Episode</option>
                     <option value="e1">Episode 1</option>
                     <option value="e2">Episode 2</option>
                     <option value="e3">Episode 3</option>
@@ -273,11 +273,13 @@
             if (csvFiles && csvFiles.length > 0) {
                 // Create and add options for each CSV file
                 csvFiles.forEach((csvFile) => {
-                const option = document.createElement("option");
-                option.value = csvFile;
-                option.text = csvFile; // You can set a more user-friendly label if needed
-                csvSelect.appendChild(option);
-                });
+                    const fileNameWithoutExtension = csvFile.replace(".csv", "");
+
+                    const option = document.createElement("option");
+                    option.value = csvFile;
+                    option.text = fileNameWithoutExtension; // Display without the .csv extension
+                    csvSelect.appendChild(option);
+                    });
         
                 // Enable the load button
                 loadButton.disabled = false;
@@ -293,7 +295,7 @@
             } else {
             // If no episode is selected, display a default option
             const option = document.createElement("option");
-            option.text = "Select an Episode First";
+            option.text = "Select a Character";
             csvSelect.appendChild(option);
         
             // Disable the load button
