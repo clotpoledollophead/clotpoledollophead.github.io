@@ -6,6 +6,7 @@
     <title>Word Count</title>
     <!-- Include Chart.js from a CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -188,38 +189,7 @@
         </div>
     </div>
     <script>
-        // Function to read and parse CSV files
-        function readCSV(fileURL, canvasId) {
-            fetch(fileURL)
-                .then(response => response.text())
-                .then(csvData => {
-                    const data = parseCSV(csvData);
-                    createBarGraph(data, canvasId);
-                })
-                .catch(error => console.error(error));
-        }
-
-        // Function to parse CSV data
-        function parseCSV(csvData) {
-            const lines = csvData.split('\n');
-            const data = {
-                labels: [],
-                values: []
-            };
-
-            for (let i = 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (line) {
-                    const parts = line.split(',');
-                    data.labels.push(parts[0]);
-                    data.values.push(parseInt(parts[1]));
-                }
-            }
-
-            return data;
-        }
-
-        // Function to create a bar graph
+        // Function to create a bar graph from CSV data
         function createBarGraph(data, canvasId) {
             const ctx = document.getElementById(canvasId).getContext('2d');
             new Chart(ctx, {
@@ -227,7 +197,7 @@
                 data: {
                     labels: data.labels,
                     datasets: [{
-                        label: 'Count',
+                        label: 'Word Count',
                         data: data.values,
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(75, 192, 192, 1)',
@@ -244,6 +214,25 @@
             });
         }
 
+        // Function to read and parse CSV files
+        function readCSV(fileURL, canvasId) {
+            fetch(fileURL)
+                .then(response => response.text())
+                .then(csvData => {
+                    Papa.parse(csvData, {
+                        header: true,
+                        dynamicTyping: true,
+                        skipEmptyLines: true,
+                        complete: function (results) {
+                            const labels = results.data.map(row => row.Word);
+                            const values = results.data.map(row => row.Count);
+                            createBarGraph({ labels, values }, canvasId);
+                        }
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+
         // Function to populate the second dropdown based on folder selection
         function populateCSVFiles(folderSelect, csvFileSelect) {
             csvFileSelect.innerHTML = ''; // Clear previous file options
@@ -251,15 +240,21 @@
 
             if (selectedFolder) {
                 // Fetch the list of CSV files in the selected folder
-                fetch(`https://clotpoledollophead.github.io/hotd-viz/data/word-count/${selectedFolder}/files.json`)
-                    .then(response => response.json())
-                    .then(files => {
-                        // Populate file options based on the fetched file list
-                        files.forEach(fileName => {
-                            const option = document.createElement('option');
-                            option.value = `https://clotpoledollophead.github.io/hotd-viz/data/word-count/${selectedFolder}/${fileName}.csv`;
-                            option.textContent = fileName;
-                            csvFileSelect.appendChild(option);
+                fetch(`https://clotpoledollophead.github.io/hotd-viz/data/word-count/${selectedFolder}/`)
+                    .then(response => response.text())
+                    .then(htmlData => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(htmlData, 'text/html');
+                        const links = doc.querySelectorAll('a');
+
+                        links.forEach(link => {
+                            const fileName = link.href.split('/').pop(); // Get the file name from the URL
+                            if (fileName.endsWith('.csv')) {
+                                const option = document.createElement('option');
+                                option.value = link.href;
+                                option.textContent = fileName;
+                                csvFileSelect.appendChild(option);
+                            }
                         });
                     })
                     .catch(error => console.error(error));
