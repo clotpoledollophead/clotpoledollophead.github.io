@@ -189,100 +189,135 @@
         </div>
     </div>
     <script>
-        // Function to create a bar graph from CSV data
-        function createBarGraph(data, canvasId) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Word Count',
-                        data: data.values,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
-
-        // Function to read and parse CSV files
-        function readCSV(fileURL, canvasId) {
-            fetch(fileURL)
-                .then(response => response.text())
-                .then(csvData => {
-                    Papa.parse(csvData, {
-                        header: true,
-                        dynamicTyping: true,
-                        skipEmptyLines: true,
-                        complete: function (results) {
-                            const labels = results.data.map(row => row.Word);
-                            const values = results.data.map(row => row.Count);
-                            createBarGraph({ labels, values }, canvasId);
-                        }
-                    });
-                })
-                .catch(error => console.error(error));
-        }
-
-        // Function to populate the second dropdown based on folder selection
-        function populateCSVFiles(folderSelect, csvFileSelect) {
-            csvFileSelect.innerHTML = ''; // Clear previous file options
-            const selectedFolder = folderSelect.value;
-
-            if (selectedFolder) {
-                // Fetch the list of CSV files in the selected folder
-                fetch(`https://clotpoledollophead.github.io/hotd-viz/data/word-count/${selectedFolder}/`)
-                    .then(response => response.text())
-                    .then(textData => {
-                        const lines = textData.split('\n');
-                        lines.forEach(line => {
-                            const fileName = line.trim();
-                            if (fileName.endsWith('.csv')) {
-                                const option = document.createElement('option');
-                                option.value = fileName;
-                                option.textContent = fileName;
-                                csvFileSelect.appendChild(option);
-                            }
-                        });
-                    })
-                    .catch(error => console.error(error));
+        // Create an array of episode folders
+        const episodeFolders = [
+          "e1",
+          "e2",
+          "e3",
+          "e4",
+          "e5",
+          "e6",
+          "e7",
+          "e8",
+          "e9",
+          "e10",
+        ];
+      
+        // Get references to the HTML elements
+        const episodeSelect = document.querySelector(".folderSelect");
+        const csvSelect = document.querySelector(".csvFileSelect");
+        const loadButton = document.querySelector(".loadButton");
+      
+        // Add event listeners to the dropdowns
+        episodeSelect.addEventListener("change", handleEpisodeChange);
+        csvSelect.addEventListener("change", handleCSVChange);
+        loadButton.addEventListener("click", loadCSVData);
+      
+        // Function to handle episode selection
+        function handleEpisodeChange() {
+            const selectedEpisode = episodeSelect.value;
+        
+            // Get the reference to the CSV dropdown
+            const csvSelect = document.querySelector(".csvFileSelect");
+        
+            // Clear the current options in the CSV dropdown
+            csvSelect.innerHTML = "";
+        
+            if (selectedEpisode) {
+            // Define a list of CSV files for each episode folder
+            const csvFilesByEpisode = {
+                e1: ["Episode 1 (Full).csv", "Aemma Arryn.csv", "Alicent Hightower.csv", "Boremund Baratheon.csv", "Citizens.csv", "Corlys Velaryon.csv", 
+                "Criston Cole.csv", "Daemon Targaryen.csv", "Dragonkeepers.csv", "Goldcloaks.csv", "Harrold Westerling.csv", "Hobert Hightower.csv", 
+                "Lyman Beesbury.csv", "Lyonel Strong.csv", "Maesters.csv", "Man at Brothel.csv", "Mellos.csv", "Mysaria.csv", "Otto Hightower.csv", 
+                "Random Man.csv", "Rhaenyra Targaryen.csv", "Rhaenys Targaryen.csv", "Rickon Stark.csv", "Ryam Redwyne.csv", "Tourney Announcer.csv", 
+                "Tourney Audience.csv", "Unnamed Baratheon.csv", "Viserys I Targaryen.csv"],
+                e2: ["Episode 2 (Full).csv", "Alicent Hightower.csv", "Corlys Velaryon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Dragonkeeper Elder.csv", 
+                "Harrold Westerling.csv", "Laena Velaryon.csv", "Lyman Beesbury.csv", "Lyonel Strong.csv", "Mellos.csv", "Mysaria.csv", "Otto Hightower.csv", 
+                "Random Knight.csv", "Rhaenyra Targaryen.csv", "Rhaenys Targaryen.csv", "Viserys I Targaryen.csv"], 
+                e3: ["Episode 3 (Full).csv", "Alicent Hightower.csv", "Ceira Lannister.csv", "Corlys Velaryon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", 
+                "Hobert Hightower.csv", "Jason Lannister.csv", "Joselyn Redwyne.csv", "Laenor Velaryon.csv","Larys Strong.csv", "Lyonel Strong.csv", "Maid at King's Landing.csv", 
+                "Men at Aegon II\'s Second Nameday.csv", "Men at Kingswood Hunt.csv", "Otto Hightower.csv", "Rhaenyra Targaryen.csv", "Samwell (Bard).csv", "Ser Addam.csv", 
+                "Stepstones Soldiers (Triarchy).csv", "Tyland Lannister.csv", "Vaemond Velaryon.csv", "Velaryon Soldier.csv", "Viserys I Targaryen.csv", "Women at Aegon II\'s Second Nameday.csv"], 
+                e4: ["Episode 4 (Full).csv", "Alicent Hightower.csv", "Beric Dondarrion.csv", "Boremund Baratheon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Harwin Strong.csv", 
+                "Jerrel Bracken.csv", "Kingslanding Actor (Alicent Hightower).csv", "Kingslanding Actor (Rhaenyra Targaryen).csv", "Kingslanding Play Audience.csv", "Kingslanding Play Narrator.csv", 
+                "Kingslanding Vendor.csv", "Lyman Beesbury.csv", "Lyonel Strong.csv", "Maid at the Red Keep.csv", "Man on Rhaenyra\'s Ship.csv", "Mellos.csv", "Men at Night at Kingslanding.csv", 
+                "Mysaria.csv", "Otto Hightower.csv", "Rhaenyra Targaryen.csv", "Soldier Talking to Otto Hightower.csv", "Viserys I Targaryen.csv", "Willem Blackwood.csv", "Woman at the Red Keep.csv", 
+                "Women at Night at Kingslanding.csv"]
+            };
+        
+            // Get the list of CSV files for the selected episode
+            const csvFiles = csvFilesByEpisode[selectedEpisode];
+        
+            if (csvFiles && csvFiles.length > 0) {
+                // Create and add options for each CSV file
+                csvFiles.forEach((csvFile) => {
+                const option = document.createElement("option");
+                option.value = csvFile;
+                option.text = csvFile; // You can set a more user-friendly label if needed
+                csvSelect.appendChild(option);
+                });
+        
+                // Enable the load button
+                loadButton.disabled = false;
+            } else {
+                // If no CSV files found for the selected episode, show a message or handle it accordingly
+                const option = document.createElement("option");
+                option.text = "No CSV files found";
+                csvSelect.appendChild(option);
+        
+                // Disable the load button
+                loadButton.disabled = true;
+            }
+            } else {
+            // If no episode is selected, display a default option
+            const option = document.createElement("option");
+            option.text = "Select an Episode First";
+            csvSelect.appendChild(option);
+        
+            // Disable the load button
+            loadButton.disabled = true;
             }
         }
-
-        // Event listeners
-        document.querySelectorAll('.folderSelect').forEach(folderSelect => {
-            const csvFileSelect = folderSelect.nextElementSibling; // Get the corresponding file select element
-            const loadButton = folderSelect.nextElementSibling.nextElementSibling; // Get the load button
-
-            folderSelect.addEventListener('change', function () {
-                populateCSVFiles(folderSelect, csvFileSelect);
-                // Enable or disable the load button based on folder selection
-                loadButton.disabled = !csvFileSelect.value;
-            });
-
-            loadButton.addEventListener('click', function () {
-                const selectedFile = csvFileSelect.value;
-                if (selectedFile) {
-                    // Remove existing canvas elements
-                    csvFileSelect.parentElement.querySelectorAll('.barChart').forEach(chart => {
-                        chart.remove();
-                    });
-                    // Display the selected graph
-                    const selectedFolder = folderSelect.value;
-                    const fileURL = `https://clotpoledollophead.github.io/hotd-viz/data/word-count/${selectedFolder}/${selectedFile}`;
-                    readCSV(fileURL, loadButton.previousElementSibling.id);
-                }
-            });
-        });
-    </script>
+            
+        // Function to handle CSV file selection
+        function handleCSVChange() {
+          // Handle CSV file selection
+          // Construct the URL to the selected CSV file using the selected episode and CSV file name.
+          // You'll need to implement this function based on your CSV file structure.
+        }
+      
+        // Function to load and display CSV data
+        function loadCSVData() {
+          const selectedEpisode = episodeSelect.value;
+          const selectedCSV = csvSelect.value;
+      
+          if (selectedEpisode && selectedCSV) {
+            // Construct the URL to the selected CSV file
+            const csvURL = `https://clotpoledollophead.github.io/hotd-viz/word-count/${selectedEpisode}/${selectedCSV}`;
+      
+            // Fetch the CSV data
+            fetch(csvURL)
+              .then((response) => response.text())
+              .then((csvData) => {
+                // Parse the CSV data using PapaParse
+                Papa.parse(csvData, {
+                  header: true, // Assuming the first row contains headers
+                  dynamicTyping: true, // Automatically convert data types
+                  complete: (result) => {
+                    // Once parsing is complete, you can access the data in result.data
+                    const csvParsedData = result.data;
+      
+                    // Now you can display the CSV data as needed, e.g., in a table or chart
+                    // You'll need to implement code to render the data on the page.
+                  },
+                });
+              })
+              .catch((error) => {
+                console.error("Error loading CSV data:", error);
+              });
+          }
+        }
+      </script>
+      
 </body>
 </html>
