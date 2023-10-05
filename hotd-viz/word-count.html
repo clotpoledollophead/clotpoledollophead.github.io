@@ -285,47 +285,7 @@
                 option.text = "Select a Character";
                 csvSelect.appendChild(option);
             }
-        }
-        
-        // Function to draw a horizontal bar chart using Chart.js
-        function drawHorizontalBarChart(labels, values) {
-
-            // Filter out the last item from both labels and values arrays
-            labels.pop();
-            values.pop();
-
-            // Get a reference to the canvas element where you want to draw the chart
-            const canvas = document.querySelector(".barChart");
-
-            // Create a new Chart.js horizontal bar chart
-            new Chart(canvas, {
-                type: "horizontalBar", // Change the chart type to horizontalBar
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: "Word Count",
-                            data: values,
-                            backgroundColor: "rgba(75, 192, 192, 0.2)",
-                            borderColor: "rgba(75, 192, 192, 1)",
-                            borderWidth: 1,
-                        },
-                    ],
-                },
-                options: {
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: "Count",
-                            },
-                        },
-                    },
-                },
-                maintainAspectRatio: false, // Add this line to disable aspect ratio
-            });
-        }      
+        }     
 
         // Function to handle CSV file selection
         function handleCSVChange() {
@@ -375,7 +335,53 @@
                 console.log("Please select an episode and a CSV file.");
             }
         }
-          
+        
+        // Function to draw a horizontal bar chart using Chart.js
+        function drawHorizontalBarChart(labels, values) {
+
+            // Filter out the last item from both labels and values arrays
+            labels.pop();
+            values.pop();
+
+            // Get a reference to the canvas element where you want to draw the chart
+            const canvas = document.querySelector(".barChart");
+
+            // Create a new Chart.js horizontal bar chart
+            new Chart(canvas, {
+                type: "horizontalBar", // Change the chart type to horizontalBar
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Word Count",
+                            data: values,
+                            backgroundColor: "rgba(75, 192, 192, 0.2)",
+                            borderColor: "rgba(75, 192, 192, 1)",
+                            borderWidth: 1,
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: "Count",
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 1,
+                                callback: function (value, index, values) {
+                                    return Math.floor(value); // Ensure that only integer values are displayed
+                                },
+                            },
+                        },
+                    },
+                },
+                maintainAspectRatio: false, // Add this line to disable aspect ratio
+            });
+        } 
       </script>
       
 </body>
