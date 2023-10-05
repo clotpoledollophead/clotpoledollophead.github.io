@@ -182,7 +182,6 @@
                 <select class="csvFileSelect">
                     <!-- Options for CSV files will be populated dynamically -->
                 </select>
-                <button class="loadButton button" disabled>Load Graph</button>
                 <canvas class="barChart" width="400" height="200"></canvas>
             </div>
             <!-- Add containers for other episodes as needed -->
@@ -225,121 +224,150 @@
         
             if (selectedEpisode) {
             // Define a list of CSV files for each episode folder
-            const csvFilesByEpisode = {
-                e1: ["Episode 1 (Full).csv", "Aemma Arryn.csv", "Alicent Hightower.csv", "Boremund Baratheon.csv", "Citizens.csv", "Corlys Velaryon.csv", 
-                "Criston Cole.csv", "Daemon Targaryen.csv", "Dragonkeepers.csv", "Goldcloaks.csv", "Harrold Westerling.csv", "Hobert Hightower.csv", 
-                "Lyman Beesbury.csv", "Lyonel Strong.csv", "Maesters.csv", "Man at Brothel.csv", "Mellos.csv", "Mysaria.csv", "Otto Hightower.csv", 
-                "Random Man.csv", "Rhaenyra Targaryen.csv", "Rhaenys Targaryen.csv", "Rickon Stark.csv", "Ryam Redwyne.csv", "Tourney Announcer.csv", 
-                "Tourney Audience.csv", "Unnamed Baratheon.csv", "Viserys I Targaryen.csv"],
-                e2: ["Episode 2 (Full).csv", "Alicent Hightower.csv", "Corlys Velaryon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Dragonkeeper Elder.csv", 
-                "Harrold Westerling.csv", "Laena Velaryon.csv", "Lyman Beesbury.csv", "Lyonel Strong.csv", "Mellos.csv", "Mysaria.csv", "Otto Hightower.csv", 
-                "Random Knight.csv", "Rhaenyra Targaryen.csv", "Rhaenys Targaryen.csv", "Viserys I Targaryen.csv"], 
-                e3: ["Episode 3 (Full).csv", "Alicent Hightower.csv", "Ceira Lannister.csv", "Corlys Velaryon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", 
-                "Hobert Hightower.csv", "Jason Lannister.csv", "Joselyn Redwyne.csv", "Laenor Velaryon.csv","Larys Strong.csv", "Lyonel Strong.csv", "Maid at King's Landing.csv", 
-                "Men at Aegon II\'s Second Nameday.csv", "Men at Kingswood Hunt.csv", "Otto Hightower.csv", "Rhaenyra Targaryen.csv", "Samwell (Bard).csv", "Ser Addam.csv", 
-                "Stepstones Soldiers (Triarchy).csv", "Tyland Lannister.csv", "Vaemond Velaryon.csv", "Velaryon Soldier.csv", "Viserys I Targaryen.csv", "Women at Aegon II\'s Second Nameday.csv"], 
-                e4: ["Episode 4 (Full).csv", "Alicent Hightower.csv", "Beric Dondarrion.csv", "Boremund Baratheon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Harwin Strong.csv", 
-                "Jerrel Bracken.csv", "Kingslanding Actor (Alicent Hightower).csv", "Kingslanding Actor (Rhaenyra Targaryen).csv", "Kingslanding Play Audience.csv", "Kingslanding Play Narrator.csv", 
-                "Kingslanding Vendor.csv", "Lyman Beesbury.csv", "Lyonel Strong.csv", "Maid at the Red Keep.csv", "Man on Rhaenyra\'s Ship.csv", "Mellos.csv", "Men at Night at Kingslanding.csv", 
-                "Mysaria.csv", "Otto Hightower.csv", "Rhaenyra Targaryen.csv", "Soldier Talking to Otto Hightower.csv", "Viserys I Targaryen.csv", "Willem Blackwood.csv", "Woman at the Red Keep.csv", 
-                "Women at Night at Kingslanding.csv"], 
-                e5: ["Episode 5 (Full).csv", "Alicent Hightower.csv", "Corlys Velaryon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Gerald Royce.csv", "Harrold Westerling.csv", "Harwin Strong.csv", 
-                "Hobert Hightower.csv", "Jason Lannister.csv", "Joffrey Lonmouth.csv", "Knight at Drftmark.csv", "Laena Velaryon.csv", "Laenor Velaryon.csv", "Larys Strong.csv", "Lyonel Strong.csv", "Maester Orwyle.csv", 
-                "Maid in Red Keep.csv", "Man at Wedding Dance.csv", "Man with Viserys I Targaryen.csv", "Mellos.csv", "Otto Hightower.csv", "Rhaenyra Targaryen.csv", "Rhaenys Velaryon.csv", "Rhea Royce.csv", 
-                "Servant in Red Keep.csv", "Viserys I Targaryen.csv", "Wedding Dance Crowd.csv", "Wedding Officiator.csv"], 
-                e6: ["Episode 6 (Full).csv", "Aegon II Targaryen.csv", "Aemond Targaryen.csv", "Alicent Hightower.csv", "All at Reggio\'s Feast.csv", "Allun Caswell.csv", "Baela Targaryen.csv", "Criston Cole.csv", 
-                "Crowd of Nobles at Red Keep.csv", "Daemon Targaryen.csv", "Dragonkeepers.csv", "Harwin Strong.csv", "Helaena Targaryen.csv", "Jacaerys Velaryon.csv", "Jasper Wylde.csv", "Laena Velaryon.csv", "Laena\'s Maester.csv", 
-                "Laena\'s Midwife.csv", "Laenor Velaryon.csv", "Larys Strong.csv", "Lucerys Velaryon.csv", "Lyman Beesbury.csv", "Lyonel Strong.csv", "Maester Orwyle.csv", "Midwives for Rhaenyra.csv", "Reggio Haratis.csv", "Rhaena Targaryen.csv", 
-                "Rhaenyra Targaryen.csv", "Talya.csv", "Tyland Lannister.csv", "Viserys I Targaryen.csv"], 
-                e7: ["Episode 7 (Full).csv", "Aegon II Targaryen.csv", "Aemond Targaryen.csv", "Alicent Hightower.csv", "Baela Targaryen.csv", "Corlys Velaryon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Harrold Westerling.csv", 
-                "Helaena Targaryen.csv", "Jacaerys Velaryon.csv", "Laenor Velaryon.csv", "Laenor Velaryon\'s Death Witness.csv", "Larys Strong.csv", "Lucerys Velaryon.csv", "Maester for Aemond\'s Eye.csv", "Maester for Rhaenyra\'s Hand.csv", 
-                "Maid at Red Keep.csv", "Man at Eye Stabbing Aftermath.csv", "Noble at Laena\'s Funeral.csv", "Otto HIghtower.csv", "Priest at Daemon and Rhaenyra\'s Wedding.csv", "Qarl Correy.csv", "Rhaena Targaryen.csv", 
-                "Rhaenyra Targaryen.csv", "Rhaenys Targaryen.csv", "Vaemond Velaryon.csv", "Viserys I Targaryen.csv"], 
-                e8: ["Episode 8 (Full).csv", "Aegon II Targaryen.csv", "Aemond Targaryen.csv", "Alicent Hightower.csv", "Allun Caswell.csv", "Baela Targaryen.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Dragonkeeper Elder.csv", 
-                "Dyana.csv", "Erryk Cargyll.csv", "Guard of the Red Keep.csv","Harrold Westerling.csv", "Helaena Targaryen.csv", "Jacaerys Velaryon.csv", "Jasper Wylde.csv", "Kingsguard (Unknown).csv", "Lucerys Velaryon.csv","Lyman Beesbury.csv", "Maester Gerardys.csv", "Maester Kelvyn.csv", 
-                "Maester Orwyle.csv", "Man at Gate in Kingslanding.csv", "Mysaria.csv", "Otto Hightower.csv", "Rhaena Targaryen.csv", "Rhaenyra Targaryen.csv", "Rhaenys Targaryen.csv", "Talya.csv", 
-                "Tyland Lannister.csv", "Vaemond Velaryon.csv", "Viserys I Targaryen.csv"], 
-                e9: ["Episode 9 (Full).csv", "Aegon II Targaryen.csv", "Aegon II\'s Coronation Crowd.csv", "Aegon II\'s coronation Guards.csv", "Aegon II\'s Coronation Priest.csv", "Aegon II's Coronation Soldiers.csv", "Aemond Targaryen.csv", 
-                , "Alicent Hightower.csv", "All To Aegon II\'s New Oath.csv", "Man at Aegon II\'s Coronation.csv", "Allun Caswell.csv", "Arryk Cargyll.csv", "Child Fighting Pit Crowd.csv", "Child Fighting Pit\'s Men.csv", "Criston Cole.csv", "Erryk Cargyll.csv", 
-                "Harrold Westerling.csv", "Helaena Targaryen.csv", "Jasper Wylde.csv", "Lady Fell.csv", "Larys Strong.csv", "Lord Merrryweather.csv", "Lyman Beesbury.csv", "Maester Orwyle.csv", "Maid at Red Keep.csv", "Mysaria.csv", "Mysaria\'s Spy.csv", "Otto Hightower.csv", "Red Keep Guard.csv", "Rhaenys Targaryen.csv", 
-                "Street of Silk Lady.csv", "Talya.csv", "Tyland Lannister.csv"], 
-                e10: ["Episode 10 (Full).csv", "Aemond Targaryen.csv", "Baratheon Knight.csv", "Bartimos Celtigar.csv", "Borros Baratheon.csv", "Corlys Velaryon.csv", "Daemon Targaryen.csv", "Daemon Targaryen\'s War Council.csv", "Erryk Cargyll.csv", "Jacaerys and Lucery's Fighting Maester.csv", "Jacaerys Velaryon.csv", "Lorent Marbrand.csv", 
-                "Lucerys Velaryon.csv", "Maester Gerardys.csv", "Otto Hightower.csv", "Rhaena Targaryen.csv", "Rhaenyra Targaryen.csv", "Rhaenyra\'s Birthing Maester.csv", "Rhaenyra\'s Midwives.csv", "Rhaenyra's War Council.csv", "Rhaenys Targaryen.csv", "Simon Staunton.csv","Steffon Darklyn.csv"]
-            };
+                const csvFilesByEpisode = {
+                    e1: ["Episode 1 (Full).csv", "Aemma Arryn.csv", "Alicent Hightower.csv", "Boremund Baratheon.csv", "Citizens.csv", "Corlys Velaryon.csv", 
+                    "Criston Cole.csv", "Daemon Targaryen.csv", "Dragonkeepers.csv", "Goldcloaks.csv", "Harrold Westerling.csv", "Hobert Hightower.csv", 
+                    "Lyman Beesbury.csv", "Lyonel Strong.csv", "Maesters.csv", "Man at Brothel.csv", "Mellos.csv", "Mysaria.csv", "Otto Hightower.csv", 
+                    "Random Man.csv", "Rhaenyra Targaryen.csv", "Rhaenys Targaryen.csv", "Rickon Stark.csv", "Ryam Redwyne.csv", "Tourney Announcer.csv", 
+                    "Tourney Audience.csv", "Unnamed Baratheon.csv", "Viserys I Targaryen.csv"],
+                    e2: ["Episode 2 (Full).csv", "Alicent Hightower.csv", "Corlys Velaryon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Dragonkeeper Elder.csv", 
+                    "Harrold Westerling.csv", "Laena Velaryon.csv", "Lyman Beesbury.csv", "Lyonel Strong.csv", "Mellos.csv", "Mysaria.csv", "Otto Hightower.csv", 
+                    "Random Knight.csv", "Rhaenyra Targaryen.csv", "Rhaenys Targaryen.csv", "Viserys I Targaryen.csv"], 
+                    e3: ["Episode 3 (Full).csv", "Alicent Hightower.csv", "Ceira Lannister.csv", "Corlys Velaryon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", 
+                    "Hobert Hightower.csv", "Jason Lannister.csv", "Joselyn Redwyne.csv", "Laenor Velaryon.csv","Larys Strong.csv", "Lyonel Strong.csv", "Maid at King's Landing.csv", 
+                    "Men at Aegon II\'s Second Nameday.csv", "Men at Kingswood Hunt.csv", "Otto Hightower.csv", "Rhaenyra Targaryen.csv", "Samwell (Bard).csv", "Ser Addam.csv", 
+                    "Stepstones Soldiers (Triarchy).csv", "Tyland Lannister.csv", "Vaemond Velaryon.csv", "Velaryon Soldier.csv", "Viserys I Targaryen.csv", "Women at Aegon II\'s Second Nameday.csv"], 
+                    e4: ["Episode 4 (Full).csv", "Alicent Hightower.csv", "Beric Dondarrion.csv", "Boremund Baratheon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Harwin Strong.csv", 
+                    "Jerrel Bracken.csv", "Kingslanding Actor (Alicent Hightower).csv", "Kingslanding Actor (Rhaenyra Targaryen).csv", "Kingslanding Play Audience.csv", "Kingslanding Play Narrator.csv", 
+                    "Kingslanding Vendor.csv", "Lyman Beesbury.csv", "Lyonel Strong.csv", "Maid at the Red Keep.csv", "Man on Rhaenyra\'s Ship.csv", "Mellos.csv", "Men at Night at Kingslanding.csv", 
+                    "Mysaria.csv", "Otto Hightower.csv", "Rhaenyra Targaryen.csv", "Soldier Talking to Otto Hightower.csv", "Viserys I Targaryen.csv", "Willem Blackwood.csv", "Woman at the Red Keep.csv", 
+                    "Women at Night at Kingslanding.csv"], 
+                    e5: ["Episode 5 (Full).csv", "Alicent Hightower.csv", "Corlys Velaryon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Gerald Royce.csv", "Harrold Westerling.csv", "Harwin Strong.csv", 
+                    "Hobert Hightower.csv", "Jason Lannister.csv", "Joffrey Lonmouth.csv", "Knight at Drftmark.csv", "Laena Velaryon.csv", "Laenor Velaryon.csv", "Larys Strong.csv", "Lyonel Strong.csv", "Maester Orwyle.csv", 
+                    "Maid in Red Keep.csv", "Man at Wedding Dance.csv", "Man with Viserys I Targaryen.csv", "Mellos.csv", "Otto Hightower.csv", "Rhaenyra Targaryen.csv", "Rhaenys Velaryon.csv", "Rhea Royce.csv", 
+                    "Servant in Red Keep.csv", "Viserys I Targaryen.csv", "Wedding Dance Crowd.csv", "Wedding Officiator.csv"], 
+                    e6: ["Episode 6 (Full).csv", "Aegon II Targaryen.csv", "Aemond Targaryen.csv", "Alicent Hightower.csv", "All at Reggio\'s Feast.csv", "Allun Caswell.csv", "Baela Targaryen.csv", "Criston Cole.csv", 
+                    "Crowd of Nobles at Red Keep.csv", "Daemon Targaryen.csv", "Dragonkeepers.csv", "Harwin Strong.csv", "Helaena Targaryen.csv", "Jacaerys Velaryon.csv", "Jasper Wylde.csv", "Laena Velaryon.csv", "Laena\'s Maester.csv", 
+                    "Laena\'s Midwife.csv", "Laenor Velaryon.csv", "Larys Strong.csv", "Lucerys Velaryon.csv", "Lyman Beesbury.csv", "Lyonel Strong.csv", "Maester Orwyle.csv", "Midwives for Rhaenyra.csv", "Reggio Haratis.csv", "Rhaena Targaryen.csv", 
+                    "Rhaenyra Targaryen.csv", "Talya.csv", "Tyland Lannister.csv", "Viserys I Targaryen.csv"], 
+                    e7: ["Episode 7 (Full).csv", "Aegon II Targaryen.csv", "Aemond Targaryen.csv", "Alicent Hightower.csv", "Baela Targaryen.csv", "Corlys Velaryon.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Harrold Westerling.csv", 
+                    "Helaena Targaryen.csv", "Jacaerys Velaryon.csv", "Laenor Velaryon.csv", "Laenor Velaryon\'s Death Witness.csv", "Larys Strong.csv", "Lucerys Velaryon.csv", "Maester for Aemond\'s Eye.csv", "Maester for Rhaenyra\'s Hand.csv", 
+                    "Maid at Red Keep.csv", "Man at Eye Stabbing Aftermath.csv", "Noble at Laena\'s Funeral.csv", "Otto HIghtower.csv", "Priest at Daemon and Rhaenyra\'s Wedding.csv", "Qarl Correy.csv", "Rhaena Targaryen.csv", 
+                    "Rhaenyra Targaryen.csv", "Rhaenys Targaryen.csv", "Vaemond Velaryon.csv", "Viserys I Targaryen.csv"], 
+                    e8: ["Episode 8 (Full).csv", "Aegon II Targaryen.csv", "Aemond Targaryen.csv", "Alicent Hightower.csv", "Allun Caswell.csv", "Baela Targaryen.csv", "Criston Cole.csv", "Daemon Targaryen.csv", "Dragonkeeper Elder.csv", 
+                    "Dyana.csv", "Erryk Cargyll.csv", "Guard of the Red Keep.csv","Harrold Westerling.csv", "Helaena Targaryen.csv", "Jacaerys Velaryon.csv", "Jasper Wylde.csv", "Kingsguard (Unknown).csv", "Lucerys Velaryon.csv","Lyman Beesbury.csv", "Maester Gerardys.csv", "Maester Kelvyn.csv", 
+                    "Maester Orwyle.csv", "Man at Gate in Kingslanding.csv", "Mysaria.csv", "Otto Hightower.csv", "Rhaena Targaryen.csv", "Rhaenyra Targaryen.csv", "Rhaenys Targaryen.csv", "Talya.csv", 
+                    "Tyland Lannister.csv", "Vaemond Velaryon.csv", "Viserys I Targaryen.csv"], 
+                    e9: ["Episode 9 (Full).csv", "Aegon II Targaryen.csv", "Aegon II\'s Coronation Crowd.csv", "Aegon II\'s coronation Guards.csv", "Aegon II\'s Coronation Priest.csv", "Aegon II's Coronation Soldiers.csv", "Aemond Targaryen.csv", 
+                    "Alicent Hightower.csv", "All To Aegon II\'s New Oath.csv", "Man at Aegon II\'s Coronation.csv", "Allun Caswell.csv", "Arryk Cargyll.csv", "Child Fighting Pit Crowd.csv", "Child Fighting Pit\'s Men.csv", "Criston Cole.csv", "Erryk Cargyll.csv", 
+                    "Harrold Westerling.csv", "Helaena Targaryen.csv", "Jasper Wylde.csv", "Lady Fell.csv", "Larys Strong.csv", "Lord Merrryweather.csv", "Lyman Beesbury.csv", "Maester Orwyle.csv", "Maid at Red Keep.csv", "Mysaria.csv", "Mysaria\'s Spy.csv", "Otto Hightower.csv", "Red Keep Guard.csv", "Rhaenys Targaryen.csv", 
+                    "Street of Silk Lady.csv", "Talya.csv", "Tyland Lannister.csv"], 
+                    e10: ["Episode 10 (Full).csv", "Aemond Targaryen.csv", "Baratheon Knight.csv", "Bartimos Celtigar.csv", "Borros Baratheon.csv", "Corlys Velaryon.csv", "Daemon Targaryen.csv", "Daemon Targaryen\'s War Council.csv", "Erryk Cargyll.csv", "Jacaerys and Lucery's Fighting Maester.csv", "Jacaerys Velaryon.csv", "Lorent Marbrand.csv", 
+                    "Lucerys Velaryon.csv", "Maester Gerardys.csv", "Otto Hightower.csv", "Rhaena Targaryen.csv", "Rhaenyra Targaryen.csv", "Rhaenyra\'s Birthing Maester.csv", "Rhaenyra\'s Midwives.csv", "Rhaenyra's War Council.csv", "Rhaenys Targaryen.csv", "Simon Staunton.csv","Steffon Darklyn.csv"]
+                };
+            
+                // Get the list of CSV files for the selected episode
+                const csvFiles = csvFilesByEpisode[selectedEpisode];
+            
+                if (csvFiles && csvFiles.length > 0) {
+                    // Create and add options for each CSV file
+                    csvFiles.forEach((csvFile) => {
+                        const fileNameWithoutExtension = csvFile.replace(".csv", "");
         
-            // Get the list of CSV files for the selected episode
-            const csvFiles = csvFilesByEpisode[selectedEpisode];
-        
-            if (csvFiles && csvFiles.length > 0) {
-                // Create and add options for each CSV file
-                csvFiles.forEach((csvFile) => {
-                    const fileNameWithoutExtension = csvFile.replace(".csv", "");
-
-                    const option = document.createElement("option");
-                    option.value = csvFile;
-                    option.text = fileNameWithoutExtension; // Display without the .csv extension
-                    csvSelect.appendChild(option);
+                        const option = document.createElement("option");
+                        option.value = csvFile;
+                        option.text = fileNameWithoutExtension; // Display without the .csv extension
+                        csvSelect.appendChild(option);
                     });
         
-                // Enable the load button
-                loadButton.disabled = false;
+                    // Automatically load and draw the chart when both episode and CSV are selected
+                    handleCSVChange(); // Call the handleCSVChange function
+                } else {
+                    // If no CSV files found for the selected episode, show a message or handle it accordingly
+                    const option = document.createElement("option");
+                    option.text = "No CSV files found";
+                    csvSelect.appendChild(option);
+                }
             } else {
-                // If no CSV files found for the selected episode, show a message or handle it accordingly
+                // If no episode is selected, display a default option
                 const option = document.createElement("option");
-                option.text = "No CSV files found";
+                option.text = "Select a Character";
                 csvSelect.appendChild(option);
-        
-                // Disable the load button
-                loadButton.disabled = true;
-            }
-            } else {
-            // If no episode is selected, display a default option
-            const option = document.createElement("option");
-            option.text = "Select a Character";
-            csvSelect.appendChild(option);
-        
-            // Disable the load button
-            loadButton.disabled = true;
             }
         }
             
         // Function to handle CSV file selection
         function handleCSVChange() {
-          // Handle CSV file selection
-          // Construct the URL to the selected CSV file using the selected episode and CSV file name.
-          // You'll need to implement this function based on your CSV file structure.
-        }
-      
-        // Function to load and display CSV data
-        function loadCSVData() {
-          const selectedEpisode = episodeSelect.value;
-          const selectedCSV = csvSelect.value;
-      
-          if (selectedEpisode && selectedCSV) {
+            // Get the selected episode and CSV file name
+            const selectedEpisode = episodeSelect.value;
+            const selectedCSV = csvSelect.value;
+        
+            if (selectedEpisode && selectedCSV) {
             // Construct the URL to the selected CSV file
             const csvURL = `https://clotpoledollophead.github.io/hotd-viz/word-count/${selectedEpisode}/${selectedCSV}`;
-      
+        
             // Fetch the CSV data
             fetch(csvURL)
-              .then((response) => response.text())
-              .then((csvData) => {
+                .then((response) => response.text())
+                .then((csvData) => {
                 // Parse the CSV data using PapaParse
                 Papa.parse(csvData, {
-                  header: true, // Assuming the first row contains headers
-                  dynamicTyping: true, // Automatically convert data types
-                  complete: (result) => {
+                    header: true, // Assuming the first row contains headers
+                    dynamicTyping: true, // Automatically convert data types
+                    complete: (result) => {
                     // Once parsing is complete, you can access the data in result.data
                     const csvParsedData = result.data;
-      
-                    // Now you can display the CSV data as needed, e.g., in a table or chart
-                    // You'll need to implement code to render the data on the page.
-                  },
+        
+                    // Draw a bar chart using Chart.js
+                    drawBarChart(csvParsedData);
+                    },
                 });
-              })
-              .catch((error) => {
+                })
+                .catch((error) => {
                 console.error("Error loading CSV data:", error);
-              });
-          }
+                });
+            } else {
+            // Handle the case when no episode or CSV file is selected
+            console.log("Please select an episode and a CSV file.");
+            }
+        }
+        
+        // Function to draw a bar chart using Chart.js
+        function drawBarChart(csvData) {
+            // Extract data for labels and values from the parsed CSV data
+            const labels = csvData.map((row) => row.Word);
+            const values = csvData.map((row) => row.Count);
+        
+            // Get a reference to the canvas element where you want to draw the chart
+            const canvas = document.querySelector(".barChart");
+        
+            // Create a new Chart.js bar chart
+            new Chart(canvas, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [
+                {
+                    label: "Word Count",
+                    data: values,
+                    backgroundColor: "rgba(75, 192, 192, 0.2)", // Adjust the color as needed
+                    borderColor: "rgba(75, 192, 192, 1)", // Adjust the color as needed
+                    borderWidth: 1,
+                },
+                ],
+            },
+            options: {
+                scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                    display: true,
+                    text: "Count",
+                    },
+                },
+                },
+            },
+            });
         }
       </script>
       
