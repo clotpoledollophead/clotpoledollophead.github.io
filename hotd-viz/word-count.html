@@ -210,8 +210,7 @@
         // Add event listeners to the dropdowns
         episodeSelect.addEventListener("change", handleEpisodeChange);
         csvSelect.addEventListener("change", handleCSVChange);
-        loadButton.addEventListener("click", loadCSVData);
-      
+
         // Function to handle episode selection
         function handleEpisodeChange() {
             const selectedEpisode = episodeSelect.value;
@@ -303,34 +302,41 @@
             const selectedCSV = csvSelect.value;
         
             if (selectedEpisode && selectedCSV) {
-            // Construct the URL to the selected CSV file
-            const csvURL = `https://clotpoledollophead.github.io/hotd-viz/word-count/${selectedEpisode}/${selectedCSV}`;
+                // Construct the URL to the selected CSV file
+                const csvURL = `https://clotpoledollophead.github.io/hotd-viz/word-count/${selectedEpisode}/${selectedCSV}`;
         
-            // Fetch the CSV data
-            fetch(csvURL)
-                .then((response) => response.text())
-                .then((csvData) => {
-                // Parse the CSV data using PapaParse
-                Papa.parse(csvData, {
-                    header: true, // Assuming the first row contains headers
-                    dynamicTyping: true, // Automatically convert data types
-                    complete: (result) => {
-                    // Once parsing is complete, you can access the data in result.data
-                    const csvParsedData = result.data;
+                console.log("CSV URL:", csvURL); // Add this line for debugging
         
-                    // Draw a bar chart using Chart.js
-                    drawBarChart(csvParsedData);
-                    },
-                });
-                })
-                .catch((error) => {
-                console.error("Error loading CSV data:", error);
-                });
+                // Fetch the CSV data
+                fetch(csvURL)
+                    .then((response) => response.text())
+                    .then((csvData) => {
+                        console.log("CSV Data:", csvData); // Add this line for debugging
+        
+                        // Parse the CSV data using PapaParse
+                        Papa.parse(csvData, {
+                            header: true, // Assuming the first row contains headers
+                            dynamicTyping: true, // Automatically convert data types
+                            complete: (result) => {
+                                console.log("Parsed Data:", result.data); // Add this line for debugging
+        
+                                // Once parsing is complete, you can access the data in result.data
+                                const csvParsedData = result.data;
+        
+                                // Draw a bar chart using Chart.js
+                                drawBarChart(csvParsedData);
+                            },
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error loading CSV data:", error);
+                    });
             } else {
-            // Handle the case when no episode or CSV file is selected
-            console.log("Please select an episode and a CSV file.");
+                // Handle the case when no episode or CSV file is selected
+                console.log("Please select an episode and a CSV file.");
             }
         }
+        
         
         // Function to draw a bar chart using Chart.js
         function drawBarChart(csvData) {
@@ -343,30 +349,30 @@
         
             // Create a new Chart.js bar chart
             new Chart(canvas, {
-            type: "bar",
-            data: {
-                labels: labels,
-                datasets: [
-                {
-                    label: "Word Count",
-                    data: values,
-                    backgroundColor: "rgba(75, 192, 192, 0.2)", // Adjust the color as needed
-                    borderColor: "rgba(75, 192, 192, 1)", // Adjust the color as needed
-                    borderWidth: 1,
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Word Count",
+                            data: values,
+                            backgroundColor: "rgba(75, 192, 192, 0.2)", // Adjust the color as needed
+                            borderColor: "rgba(75, 192, 192, 1)", // Adjust the color as needed
+                            borderWidth: 1,
+                        },
+                    ],
                 },
-                ],
-            },
-            options: {
-                scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                    display: true,
-                    text: "Count",
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: "Count",
+                            },
+                        },
                     },
                 },
-                },
-            },
             });
         }
       </script>
