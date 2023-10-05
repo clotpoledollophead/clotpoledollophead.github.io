@@ -126,7 +126,8 @@
             flex-wrap: wrap;
             justify-content: space-between;
             margin: 5%;
-            overflow: auto
+            max-height: 400px; /* Adjust the max height as needed */
+            overflow: auto;
         }
 
         .episodeGraph canvas {
@@ -312,11 +313,12 @@
                                 const filteredData = result.data.filter((row) => row.Count !== null && row.Count !== '');
                                 console.log("Parsed Data:", result.data); // Add this line for debugging
         
-                                // Once parsing is complete, you can access the data in result.data
-                                const csvParsedData = result.data;
-        
+                                // Extract data for labels and values from the filtered data
+                                const labels = filteredData.map((row) => row.Word);
+                                const values = filteredData.map((row) => row.Count);
+
                                 // Draw a bar chart using Chart.js
-                                drawHorizontalBarChart(csvParsedData);
+                                drawHorizontalBarChart(labels, values);
                             },
                         });
                     })
@@ -331,17 +333,12 @@
         
         
         // Function to draw a horizontal bar chart using Chart.js
-        function drawHorizontalBarChart(csvData) {
-            // Extract data for labels and values from the parsed CSV data
-            const labels = csvData.map((row) => row.Word);
-            const values = csvData.map((row) => row.Count);
-
-            // Calculate the height based on the number of labels
-            const chartHeight = labels.length * 30; // Adjust the multiplier as needed
+        function drawHorizontalBarChart(labels, values) {
+            // Calculate the height based on the number of bars and desired bar height (5px)
+            const chartHeight = labels.length * 5;
 
             // Get a reference to the canvas element where you want to draw the chart
             const canvas = document.querySelector(".barChart");
-            canvas.height = chartHeight; // Set the canvas height dynamically
 
             // Create a new Chart.js horizontal bar chart
             new Chart(canvas, {
