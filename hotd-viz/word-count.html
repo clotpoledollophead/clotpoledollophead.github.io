@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Count</title>
-    <!-- Include Chart.js from a CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
         body {
@@ -131,7 +131,6 @@
         .episodeGraph canvas {
             flex: 0 0 calc(100% - 20px);
             margin-bottom: 10px;
-            max-height: 400px;
             max-width: 600px;
         }
 
@@ -205,7 +204,6 @@
         // Get references to the HTML elements
         const episodeSelect = document.querySelector(".folderSelect");
         const csvSelect = document.querySelector(".csvFileSelect");
-        const loadButton = document.querySelector(".loadButton");
       
         // Add event listeners to the dropdowns
         episodeSelect.addEventListener("change", handleEpisodeChange);
@@ -324,7 +322,7 @@
                                 const csvParsedData = result.data;
         
                                 // Draw a bar chart using Chart.js
-                                drawBarChart(csvParsedData);
+                                drawHorizontalBarChart(csvParsedData);
                             },
                         });
                     })
@@ -338,33 +336,33 @@
         }
         
         
-        // Function to draw a bar chart using Chart.js
-        function drawBarChart(csvData) {
+        // Function to draw a horizontal bar chart using Chart.js
+        function drawHorizontalBarChart(csvData) {
             // Extract data for labels and values from the parsed CSV data
             const labels = csvData.map((row) => row.Word);
             const values = csvData.map((row) => row.Count);
-        
+
             // Get a reference to the canvas element where you want to draw the chart
             const canvas = document.querySelector(".barChart");
-        
-            // Create a new Chart.js bar chart
+
+            // Create a new Chart.js horizontal bar chart
             new Chart(canvas, {
-                type: "bar",
+                type: "horizontalBar", // Change the chart type to horizontalBar
                 data: {
                     labels: labels,
                     datasets: [
                         {
                             label: "Word Count",
                             data: values,
-                            backgroundColor: "rgba(75, 192, 192, 0.2)", // Adjust the color as needed
-                            borderColor: "rgba(75, 192, 192, 1)", // Adjust the color as needed
+                            backgroundColor: "rgba(75, 192, 192, 0.2)",
+                            borderColor: "rgba(75, 192, 192, 1)",
                             borderWidth: 1,
                         },
                     ],
                 },
                 options: {
                     scales: {
-                        y: {
+                        x: {
                             beginAtZero: true,
                             title: {
                                 display: true,
@@ -375,6 +373,7 @@
                 },
             });
         }
+
       </script>
       
 </body>
