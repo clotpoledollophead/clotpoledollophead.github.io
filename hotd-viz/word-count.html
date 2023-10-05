@@ -334,11 +334,19 @@
         
         // Function to draw a horizontal bar chart using Chart.js
         function drawHorizontalBarChart(labels, values) {
+
+            // Filter out "null" values from the values array
+            const filteredValues = values.filter((value) => value !== null && value !== "");
+
             // Calculate the height based on the number of bars and desired bar height (5px)
-            const chartHeight = labels.length * 5;
+            const chartHeight = labels.length * 15;
 
             // Get a reference to the canvas element where you want to draw the chart
             const canvas = document.querySelector(".barChart");
+
+            // Set the height of the canvas
+            canvas.height = chartHeight;
+
 
             // Create a new Chart.js horizontal bar chart
             new Chart(canvas, {
@@ -348,7 +356,7 @@
                     datasets: [
                         {
                             label: "Word Count",
-                            data: values,
+                            data: filteredValues, // Use the filtered values
                             backgroundColor: "rgba(75, 192, 192, 0.2)",
                             borderColor: "rgba(75, 192, 192, 1)",
                             borderWidth: 1,
