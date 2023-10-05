@@ -13,6 +13,7 @@
             background-color: #f5f5f5;
             margin: 0;
             padding: 0;
+            overflow: auto;
         }
 
         .menu {
@@ -127,7 +128,7 @@
             flex-wrap: wrap;
             justify-content: space-between;
             margin: 5%;
-            max-height: 400px; /* Adjust the max height as needed */
+            max-height: 100%; /* Adjust the max height as needed */
             overflow: auto;
         }
 
@@ -140,7 +141,6 @@
             cursor: pointer;
             font-size: 24px;
             padding: 0 10px;
-            position: relative;
         }
     </style>
 </head>
@@ -148,7 +148,7 @@
     <div class="menu">
         <a href="../hotd-viz.html">Home</a>
         <a href="about.html">About</a>
-        <a href="word-count.html" class="submenu-trigger">Word Count</a>
+        <a href="word-count.html">Word Count</a>
         <a href="character-network.html">Character Network</a>
         <a href="delve-in-deep.html">Delve in Deep</a>
         <a href="behind-the-scenes.html">Behind the Scenes</a>
@@ -178,8 +178,7 @@
             </div>
         </div>
         <div class="episodeGraph">
-            <canvas class="barChart" width="500"></canvas>
-        </div>
+            <canvas class="barChart" width="500" height="1000"></canvas>        </div>
     </div>
     <script>
         // Create an array of episode folders
@@ -287,52 +286,6 @@
                 csvSelect.appendChild(option);
             }
         }
-            
-        // Function to handle CSV file selection
-        function handleCSVChange() {
-            // Get the selected episode and CSV file name
-            const selectedEpisode = episodeSelect.value;
-            const selectedCSV = csvSelect.value;
-        
-            if (selectedEpisode && selectedCSV) {
-                // Construct the URL to the selected CSV file
-                const csvURL = `https://clotpoledollophead.github.io/hotd-viz/data/word-count/${selectedEpisode}/${selectedCSV}`;
-        
-                console.log("CSV URL:", csvURL); // Add this line for debugging
-        
-                // Fetch the CSV data
-                fetch(csvURL)
-                    .then((response) => response.text())
-                    .then((csvData) => {
-                        console.log("CSV Data:", csvData); // Add this line for debugging
-        
-                        // Parse the CSV data using PapaParse
-                        Papa.parse(csvData, {
-                            header: true, // Assuming the first row contains headers
-                            dynamicTyping: true, // Automatically convert data types
-                            complete: (result) => {
-
-                                const filteredData = result.data.filter((row) => row.Count !== null && row.Count !== '');
-                                console.log("Parsed Data:", result.data); // Add this line for debugging
-        
-                                // Extract data for labels and values from the filtered data
-                                const labels = filteredData.map((row) => row.Word);
-                                const values = filteredData.map((row) => row.Count);
-
-                                // Draw a bar chart using Chart.js
-                                drawHorizontalBarChart(labels, values);
-                            },
-                        });
-                    })
-                    .catch((error) => {
-                        console.error("Error loading CSV data:", error);
-                    });
-            } else {
-                // Handle the case when no episode or CSV file is selected
-                console.log("Please select an episode and a CSV file.");
-            }
-        }
-        
         
         // Function to draw a horizontal bar chart using Chart.js
         function drawHorizontalBarChart(labels, values) {
@@ -341,15 +294,8 @@
             labels.pop();
             values.pop();
 
-            // Calculate the height based on the number of bars and desired bar height (5px)
-            const chartHeight = labels.length * 15;
-
             // Get a reference to the canvas element where you want to draw the chart
             const canvas = document.querySelector(".barChart");
-
-            // Set the height of the canvas
-            canvas.height = chartHeight;
-
 
             // Create a new Chart.js horizontal bar chart
             new Chart(canvas, {
@@ -377,9 +323,59 @@
                         },
                     },
                 },
+                maintainAspectRatio: false, // Add this line to disable aspect ratio
             });
-        }
+        }      
 
+        // Function to handle CSV file selection
+        function handleCSVChange() {
+            // Get the selected episode and CSV file name
+            const selectedEpisode = episodeSelect.value;
+            const selectedCSV = csvSelect.value;
+
+            if (selectedEpisode && selectedCSV) {
+                // Construct the URL to the selected CSV file
+                const csvURL = `https://clotpoledollophead.github.io/hotd-viz/data/word-count/${selectedEpisode}/${selectedCSV}`;
+
+                console.log("CSV URL:", csvURL); // Add this line for debugging
+
+                // Fetch the CSV data
+                fetch(csvURL)
+                    .then((response) => response.text())
+                    .then((csvData) => {
+                        console.log("CSV Data:", csvData); // Add this line for debugging
+
+                        // Parse the CSV data using PapaParse
+                        Papa.parse(csvData, {
+                            header: true, // Assuming the first row contains headers
+                            dynamicTyping: true, // Automatically convert data types
+                            complete: (result) => {
+                                const filteredData = result.data.filter((row) => row.Count !== null && row.Count !== '');
+                                console.log("Parsed Data:", result.data); // Add this line for debugging
+
+                                // Extract data for labels and values from the filtered data
+                                const labels = filteredData.map((row) => row.Word);
+                                const values = filteredData.map((row) => row.Count);
+
+                                // Check if the episode and CSV file are still the same after data loading
+                                if (selectedEpisode === episodeSelect.value && selectedCSV === csvSelect.value) {
+                                    // Draw a bar chart using Chart.js
+                                    drawHorizontalBarChart(labels, values);
+                                } else {
+                                    console.log("Dropdown values changed; skipping chart drawing.");
+                                }
+                            },
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error loading CSV data:", error);
+                    });
+            } else {
+                // Handle the case when no episode or CSV file is selected
+                console.log("Please select an episode and a CSV file.");
+            }
+        }
+          
       </script>
       
 </body>
