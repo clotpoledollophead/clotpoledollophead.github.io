@@ -150,14 +150,6 @@
         <a href="delve-in-deep.html">Delve in Deep</a>
         <a href="behind-the-scenes.html">Behind the Scenes</a>
     </div>
-    <div class="menu-container">
-        <span id="menu-icon">&#9776;</span>
-        <div class="submenu">
-            <a href="word-count/word-count-ep1n.html">Episode 1</a>
-            <a href="word-count/word-count-ep1s.html">Episode 1 - Stop Words Removed</a>
-            <!-- Add more episode links as needed -->
-        </div>
-    </div>
     
     <div class="container">
         <h1>WORD COUNT</h1>
@@ -180,7 +172,7 @@
                 <select class="csvFileSelect">
                     <!-- Options for CSV files will be populated dynamically -->
                 </select>
-                <canvas class="barChart" width="400" height="200"></canvas>
+                <canvas class="barChart" width="400"></canvas>
             </div>
             <!-- Add containers for other episodes as needed -->
         </div>
@@ -341,8 +333,12 @@
             const labels = csvData.map((row) => row.Word);
             const values = csvData.map((row) => row.Count);
 
+            // Calculate the height based on the number of labels
+            const chartHeight = labels.length * 20; // Adjust the multiplier as needed
+
             // Get a reference to the canvas element where you want to draw the chart
             const canvas = document.querySelector(".barChart");
+            canvas.height = chartHeight; // Set the canvas height dynamically
 
             // Create a new Chart.js horizontal bar chart
             new Chart(canvas, {
