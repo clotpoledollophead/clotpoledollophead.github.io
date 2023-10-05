@@ -126,6 +126,7 @@
             flex-wrap: wrap;
             justify-content: space-between;
             margin: 5%;
+            overflow: auto
         }
 
         .episodeGraph canvas {
@@ -334,7 +335,7 @@
             const values = csvData.map((row) => row.Count);
 
             // Calculate the height based on the number of labels
-            const chartHeight = labels.length * 20; // Adjust the multiplier as needed
+            const chartHeight = labels.length * 30; // Adjust the multiplier as needed
 
             // Get a reference to the canvas element where you want to draw the chart
             const canvas = document.querySelector(".barChart");
